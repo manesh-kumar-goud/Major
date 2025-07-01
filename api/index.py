@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import json
 import os
 import requests
 from datetime import datetime, timedelta
@@ -198,7 +197,7 @@ def get_metrics():
 
 # For Vercel serverless deployment
 def handler(request):
-    return app(request.environ, lambda status, headers: None)
+    return app
 
 if __name__ == '__main__':
     app.run(debug=True) 

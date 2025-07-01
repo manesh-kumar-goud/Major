@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
@@ -6,7 +6,7 @@ import {
   PolarRadiusAxis, Radar, Cell, PieChart, Pie 
 } from 'recharts';
 import { 
-  FaBrain, FaRobot, FaChartBar, FaClock, FaMemory, 
+  FaBrain, FaRobot, FaChartBar, 
   FaCheckCircle, FaTimes, FaArrowRight, FaLightbulb,
   FaGraduationCap, FaIndustry, FaDatabase
 } from 'react-icons/fa';

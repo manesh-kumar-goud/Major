@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { FaRobot, FaChartLine, FaBrain, FaArrowRight, FaGithub, FaLinkedin, FaCheckCircle, FaMagic, FaChartBar, FaCogs, FaUserGraduate, FaEnvelope, FaPlayCircle } from 'react-icons/fa';
 
 const TYPING_TEXT = 'Intelligent Stock Market Forecasting';
@@ -29,20 +29,7 @@ function useTypingEffect(text, speed = 60) {
   return [displayed, showCursor];
 }
 
-const AnimatedBlobs = () => (
-  <>
-    <motion.div
-      className="absolute -top-32 -left-32 w-[40vw] h-[40vw] bg-gradient-to-br from-blue-500/60 to-emerald-400/40 rounded-full blur-3xl opacity-60 z-0"
-      animate={{ scale: [1, 1.1, 1], rotate: [0, 30, 0] }}
-      transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-    />
-    <motion.div
-      className="absolute top-1/2 right-0 w-[30vw] h-[30vw] bg-gradient-to-br from-indigo-500/60 to-purple-400/40 rounded-full blur-2xl opacity-50 z-0"
-      animate={{ scale: [1, 1.08, 1], rotate: [0, -20, 0] }}
-      transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-    />
-  </>
-);
+
 
 const AnimatedTicker = () => {
   const [offset, setOffset] = useState(0);

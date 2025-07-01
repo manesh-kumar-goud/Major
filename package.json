@@ -7,7 +7,9 @@
     "dev": "cd frontend && npm start",
     "build": "cd frontend && npm install && npm run build",
     "start": "cd frontend && npm start",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "deploy-env": "node scripts/deploy-env.js",
+    "setup-env": "cp .env.example .env.production && echo '✅ Created .env.production - please edit it with your actual values'"
   },
   "keywords": [
     "stock-prediction",

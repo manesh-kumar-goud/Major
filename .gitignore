@@ -91,4 +91,7 @@ Thumbs.db
 
 # API Keys and secrets
 config_local.py
-secrets.py 
+secrets.py
+
+# Vercel deployment
+.vercel/ 

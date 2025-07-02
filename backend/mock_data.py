@@ -9,45 +9,75 @@ class MockYahooFinanceAPI:
     def __init__(self):
         self.popular_tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'NVDA', 'NFLX']
     
-    def generate_mock_historical_data(self, symbol, period='1y', days=252):
-        """Generate realistic mock historical stock data"""
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=days)
+    def generate_mock_historical_data(self, ticker, period='1y', min_days=None):
+        """Generate mock historical stock data for testing purposes"""
         
-        # Generate date range
-        date_range = pd.date_range(start=start_date, end=end_date, freq='D')
-        date_range = [d for d in date_range if d.weekday() < 5]  # Only weekdays
+        # Determine number of days based on period
+        period_days = {
+            '1d': 1,
+            '5d': 5,
+            '1mo': 30,
+            '3mo': 90,
+            '6mo': 180,
+            '1y': 252,  # Trading days in a year
+            '2y': 504,
+            '5y': 1260,
+            'max': 2520
+        }
         
-        # Generate realistic stock prices with trend and volatility
-        base_price = random.uniform(50, 300)  # Starting price
-        trend = random.uniform(-0.0005, 0.001)  # Daily trend
-        volatility = random.uniform(0.01, 0.03)  # Daily volatility
+        days = period_days.get(period, 252)
+        if min_days and days < min_days:
+            days = min_days
         
-        prices = []
+        # Base price for different tickers
+        base_prices = {
+            'AAPL': 150.0,
+            'GOOGL': 2800.0,
+            'MSFT': 350.0,
+            'TSLA': 250.0,
+            'AMZN': 3400.0,
+            'META': 320.0,
+            'NVDA': 220.0,
+            'NFLX': 400.0,
+            'BABA': 90.0,
+            'CRM': 200.0
+        }
+        
+        base_price = base_prices.get(ticker, 100.0)
+        
+        # Generate realistic stock data
+        data = []
         current_price = base_price
         
-        for i, date in enumerate(date_range):
-            # Add trend and random walk
-            daily_return = trend + np.random.normal(0, volatility)
+        # Add some trend and volatility
+        trend = np.random.normal(0.0001, 0.002)  # Slight upward bias
+        volatility = 0.02  # 2% daily volatility
+        
+        for i in range(days):
+            date = datetime.now() - timedelta(days=days-i-1)
+            
+            # Random walk with trend
+            daily_return = np.random.normal(trend, volatility)
             current_price *= (1 + daily_return)
             
-            # Generate OHLC data
-            open_price = current_price * random.uniform(0.99, 1.01)
-            close_price = current_price
-            high_price = max(open_price, close_price) * random.uniform(1.0, 1.02)
-            low_price = min(open_price, close_price) * random.uniform(0.98, 1.0)
-            volume = random.randint(1000000, 10000000)
+            # Ensure price doesn't go negative
+            current_price = max(current_price, 1.0)
             
-            prices.append({
+            # Create OHLC data
+            high = current_price * (1 + abs(np.random.normal(0, 0.01)))
+            low = current_price * (1 - abs(np.random.normal(0, 0.01)))
+            open_price = low + (high - low) * np.random.random()
+            
+            data.append({
                 'date': date.strftime('%Y-%m-%d'),
                 'open': round(open_price, 2),
-                'high': round(high_price, 2),
-                'low': round(low_price, 2),
-                'close': round(close_price, 2),
-                'volume': volume
+                'high': round(high, 2),
+                'low': round(low, 2),
+                'close': round(current_price, 2),
+                'volume': int(np.random.uniform(1000000, 10000000))
             })
         
-        return prices
+        return data
     
     def get_mock_popular_stocks(self):
         """Generate mock popular stocks data"""

@@ -1,99 +1,79 @@
 #!/bin/bash
 
-echo "🚀 Starting Stock Market Forecasting App..."
+echo "Starting Stock Prediction Application..."
 echo
 
-# Check if Python is installed
+# Check if Python is available
+if ! command -v python3 &> /dev/null && ! command -v python &> /dev/null; then
+    echo "ERROR: Python is not installed or not in PATH"
+    exit 1
+fi
+
+# Use python3 if available, otherwise use python
+PYTHON_CMD="python3"
 if ! command -v python3 &> /dev/null; then
-    echo "❌ Python 3 is not installed or not in PATH"
-    echo "Please install Python 3.12+ from https://python.org"
-    exit 1
+    PYTHON_CMD="python"
 fi
 
-# Check if Node.js is installed
+echo "Using Python: $($PYTHON_CMD --version)"
+
+# Check if Node.js is available
 if ! command -v node &> /dev/null; then
-    echo "❌ Node.js is not installed or not in PATH"
-    echo "Please install Node.js 18+ from https://nodejs.org"
+    echo "ERROR: Node.js is not installed or not in PATH"
     exit 1
 fi
 
-# Check if .env file exists
-if [ ! -f ".env" ]; then
-    echo "❌ .env file not found"
-    echo "Please copy .env.example to .env and configure your API key"
-    echo "1. cp .env.example .env"
-    echo "2. Edit .env file with your RapidAPI key"
-    exit 1
-fi
-
-echo "✅ Prerequisites check passed"
+echo "Using Node.js: $(node --version)"
 echo
 
-# Setup backend if venv doesn't exist
-if [ ! -d "backend/venv" ]; then
-    echo "🔧 Setting up backend environment..."
-    cd backend
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    cd ..
-    echo "✅ Backend setup complete"
-    echo
-fi
-
-# Setup frontend if node_modules doesn't exist
-if [ ! -d "frontend/node_modules" ]; then
-    echo "🔧 Setting up frontend environment..."
-    cd frontend
-    npm install
-    cd ..
-    echo "✅ Frontend setup complete"
-    echo
-fi
-
-echo "🚀 Starting application..."
-echo
-echo "Starting both services:"
-echo "1. Backend (Flask API) - http://localhost:5000"
-echo "2. Frontend (React) - http://localhost:3000"
-echo
-echo "Press Ctrl+C to stop both services"
-echo
-
-# Function to cleanup background processes on exit
-cleanup() {
-    echo
-    echo "🛑 Stopping application..."
-    kill $BACKEND_PID $FRONTEND_PID 2>/dev/null
-    exit 0
-}
-
-# Trap Ctrl+C and call cleanup
-trap cleanup INT
-
-# Start backend in background
+echo "Installing/updating backend dependencies..."
 cd backend
-source venv/bin/activate
-python app.py &
+pip install -r requirements.txt
+if [ $? -ne 0 ]; then
+    echo "WARNING: Some backend dependencies may not have installed correctly"
+fi
+
+echo
+echo "Installing/updating frontend dependencies..."
+cd ../frontend
+npm install
+if [ $? -ne 0 ]; then
+    echo "ERROR: Frontend dependencies failed to install"
+    exit 1
+fi
+
+echo
+echo "Building frontend..."
+npm run build
+if [ $? -ne 0 ]; then
+    echo "ERROR: Frontend build failed"
+    exit 1
+fi
+
+echo
+echo "Starting backend server..."
+cd ../backend
+$PYTHON_CMD app.py &
 BACKEND_PID=$!
-cd ..
 
-# Wait a moment for backend to start
-sleep 3
+echo "Backend server started (PID: $BACKEND_PID)"
+sleep 2
 
-# Start frontend in background
-cd frontend
+echo
+echo "Starting frontend development server..."
+cd ../frontend
 npm start &
 FRONTEND_PID=$!
-cd ..
 
-echo "🎉 Application is starting up!"
+echo "Frontend server started (PID: $FRONTEND_PID)"
 echo
-echo "Backend PID: $BACKEND_PID"
-echo "Frontend PID: $FRONTEND_PID"
+echo "✅ Application started successfully!"
 echo
-echo "The app will be available at http://localhost:3000 in a few moments."
-echo "Press Ctrl+C to stop both services."
+echo "Backend server: http://localhost:5000"
+echo "Frontend server: http://localhost:3000"
+echo
+echo "Press Ctrl+C to stop both servers"
 
-# Wait for user to press Ctrl+C
+# Wait for interrupt signal
+trap "kill $BACKEND_PID $FRONTEND_PID; exit" INT
 wait 

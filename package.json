@@ -1,27 +1,17 @@
 {
   "name": "stock-prediction-app",
   "version": "1.0.0",
-  "description": "Intelligent Stock Market Forecasting Using Deep Learning",
-  "main": "index.js",
+  "description": "AI-powered stock market prediction application",
   "scripts": {
-    "dev": "cd frontend && npm start",
     "build": "cd frontend && npm install && npm run build",
     "start": "cd frontend && npm start",
-    "deploy": "vercel --prod",
-    "deploy-env": "node scripts/deploy-env.js",
-    "setup-env": "cp .env.example .env.production && echo '✅ Created .env.production - please edit it with your actual values'"
+    "dev": "cd frontend && npm start"
   },
-  "keywords": [
-    "stock-prediction",
-    "machine-learning",
-    "lstm",
-    "rnn",
-    "react",
-    "flask"
-  ],
-  "author": "Your Name",
+  "keywords": ["stock", "prediction", "ai", "machine-learning", "react", "flask"],
+  "author": "manesh-kumar-goud",
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 } 

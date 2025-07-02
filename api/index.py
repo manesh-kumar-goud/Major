@@ -195,12 +195,6 @@ def get_metrics():
         'api_version': '1.0.0'
     })
 
-# For Vercel serverless deployment
-def handler(request):
-    return app
-
-# Vercel entry point
-app = app
-
+# Vercel serverless entry point
 if __name__ == '__main__':
     app.run(debug=True) 

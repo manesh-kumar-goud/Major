@@ -19,12 +19,17 @@
       "dest": "/api/index.py"
     },
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$)",
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json|txt)$)",
       "dest": "/frontend/build/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/frontend/build/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/index.py": {
+      "runtime": "python3.9"
+    }
+  }
 } 

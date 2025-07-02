@@ -199,5 +199,8 @@ def get_metrics():
 def handler(request):
     return app
 
+# Vercel entry point
+app = app
+
 if __name__ == '__main__':
     app.run(debug=True) 

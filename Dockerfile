@@ -4,7 +4,6 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV FLASK_APP=backend/app.py
 ENV FLASK_ENV=production
 
 # Set working directory
@@ -23,7 +22,7 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY backend/ backend/
+COPY backend/ ./
 COPY api/ api/
 
 # Create necessary directories
@@ -32,5 +31,5 @@ RUN mkdir -p logs
 # Expose port
 EXPOSE 5000
 
-# Run the application
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"] 
+# Run the application directly with Python
+CMD ["python", "app.py"] 

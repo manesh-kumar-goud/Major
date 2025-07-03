@@ -10,7 +10,7 @@ import {
   FaArrowUp, FaArrowDown, FaEquals
 } from 'react-icons/fa';
 import axios from 'axios';
-import { API_BASE_URL, USE_MOCK_DATA, MOCK_DATA } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 
 const Prediction = () => {
   const [formData, setFormData] = useState({
@@ -33,18 +33,11 @@ const Prediction = () => {
 
   const fetchPopularStocks = async () => {
     try {
-      if (USE_MOCK_DATA) {
-        // Use mock data for frontend-only deployment
-        setPopularStocks(MOCK_DATA.popularStocks);
-        return;
-      }
-      
       const response = await axios.get(`${API_BASE_URL}/popular-stocks`);
-      setPopularStocks(response.data.stocks || []);
+      setPopularStocks(response.data || response.data.stocks || []);
     } catch (err) {
       console.error('Error fetching popular stocks:', err);
-      // Fallback to mock data if API fails
-      setPopularStocks(MOCK_DATA.popularStocks);
+      setError('Failed to fetch popular stocks');
     }
   };
 
@@ -61,29 +54,13 @@ const Prediction = () => {
     setError(null);
     
     try {
-      if (USE_MOCK_DATA) {
-        // Use mock data for frontend-only deployment
-        setTimeout(() => {
-          const mockResult = MOCK_DATA.generatePrediction(formData.ticker, formData.predictionDays);
-          setResults(mockResult);
-          setLoading(false);
-        }, 2000); // Simulate API delay
-        return;
-      }
-      
       const response = await axios.post(`${API_BASE_URL}/predict`, formData);
       setResults(response.data);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to make prediction');
       console.error('Prediction error:', err);
-      
-      // Fallback to mock data if API fails
-      const mockResult = MOCK_DATA.generatePrediction(formData.ticker, formData.predictionDays);
-      setResults(mockResult);
     } finally {
-      if (!USE_MOCK_DATA) {
-        setLoading(false);
-      }
+      setLoading(false);
     }
   };
 
@@ -92,51 +69,18 @@ const Prediction = () => {
     setError(null);
     
     try {
-      if (USE_MOCK_DATA) {
-        // Use mock data for frontend-only deployment
-        setTimeout(() => {
-          const lstmResult = MOCK_DATA.generatePrediction(formData.ticker, formData.predictionDays);
-          const rnnResult = MOCK_DATA.generatePrediction(formData.ticker, formData.predictionDays);
-          
-          const mockComparison = {
-            ticker: formData.ticker,
-            LSTM: lstmResult,
-            RNN: rnnResult
-          };
-          
-          setResults(mockComparison);
-          setActiveTab('comparison');
-          setLoading(false);
-        }, 2500); // Simulate API delay
-        return;
-      }
-      
       const response = await axios.post(`${API_BASE_URL}/compare-models`, {
         ticker: formData.ticker,
-        period: formData.period
+        period: formData.period,
+        days: formData.predictionDays
       });
       setResults(response.data);
       setActiveTab('comparison');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to compare models');
       console.error('Comparison error:', err);
-      
-      // Fallback to mock data if API fails
-      const lstmResult = MOCK_DATA.generatePrediction(formData.ticker, formData.predictionDays);
-      const rnnResult = MOCK_DATA.generatePrediction(formData.ticker, formData.predictionDays);
-      
-      const mockComparison = {
-        ticker: formData.ticker,
-        LSTM: lstmResult,
-        RNN: rnnResult
-      };
-      
-      setResults(mockComparison);
-      setActiveTab('comparison');
     } finally {
-      if (!USE_MOCK_DATA) {
-        setLoading(false);
-      }
+      setLoading(false);
     }
   };
 

@@ -23,6 +23,7 @@
 2. Click **"New Project"**
 3. Select **"Deploy from GitHub repo"**
 4. Choose your repository: `manesh-kumar-goud/Major`
+5. Railway will automatically detect the Dockerfile and deploy your backend
 
 ### 1.2 Configure Environment Variables
 In Railway dashboard, go to **Variables** tab and add:
@@ -42,20 +43,21 @@ API_MAX_RETRIES=3
 
 ### 1.3 Deploy Backend
 Railway will automatically:
-- Build using our `Dockerfile`
-- Install TensorFlow, Flask, numpy, pandas
-- Deploy your Flask API with LSTM/RNN models
+- Detect the Dockerfile
+- Install TensorFlow, Flask, numpy, pandas, scikit-learn
+- Build and deploy your Flask API with LSTM/RNN models
+- Provide a public URL like `https://your-app.railway.app`
 
 ---
 
 ## 🔥 **STEP 2: Deploy Frontend to Vercel**
 
 ### 2.1 Update Frontend Config
-Update `frontend/src/config/api.js` with your Railway backend URL:
+After Railway deployment, get your backend URL and update `frontend/src/config/api.js`:
 
 ```javascript
-// Replace 'your-railway-app' with your actual Railway app name
-return 'https://your-railway-app.railway.app/api';
+// Replace with your actual Railway app URL
+return 'https://your-app.railway.app/api';
 ```
 
 ### 2.2 Deploy to Vercel
@@ -67,7 +69,7 @@ npx vercel --prod
 
 Set environment variable in Vercel:
 ```bash
-REACT_APP_API_URL=https://your-railway-app.railway.app/api
+REACT_APP_API_URL=https://your-app.railway.app/api
 ```
 
 ---
@@ -75,7 +77,7 @@ REACT_APP_API_URL=https://your-railway-app.railway.app/api
 ## 🔥 **STEP 3: Test Your Deployment**
 
 ### 3.1 Backend Health Check
-Visit: `https://your-railway-app.railway.app/api/health`
+Visit: `https://your-app.railway.app/api/health`
 
 Should return:
 ```json
@@ -165,9 +167,7 @@ npm start
 
 ### Backend Issues:
 ```bash
-# Check Railway logs
-railway logs
-
+# Check Railway logs in dashboard
 # Test locally
 python backend/app.py
 ```
@@ -178,8 +178,16 @@ python backend/app.py
 echo $REACT_APP_API_URL
 
 # Test API connection
-curl https://your-railway-app.railway.app/api/health
+curl https://your-app.railway.app/api/health
 ```
+
+---
+
+## 📁 **Files Created for Railway Deployment:**
+- ✅ `Dockerfile` - Docker configuration with TensorFlow
+- ✅ `railway.toml` - Railway.app deployment settings
+- ✅ `backend/requirements.txt` - Python dependencies
+- ✅ Updated API configurations for real data
 
 ---
 

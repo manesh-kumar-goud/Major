@@ -17,19 +17,6 @@ load_dotenv()
 sys.path.insert(0, os.path.dirname(__file__))
 
 from app import app
-from deployment_config import get_config, print_deployment_status
 
-# Configure the app for production
-config_class = get_config()
-app.config.from_object(config_class)
-
-# Print deployment status if running directly
 if __name__ == "__main__":
-    print_deployment_status()
-    
-    # Run the app
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=app.config['DEBUG'])
-else:
-    # This is the WSGI callable that servers like Gunicorn will use
-    application = app 
+    app.run() 

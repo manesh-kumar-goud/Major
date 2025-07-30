@@ -1,8 +1,8 @@
 // API Configuration
 const getApiBaseUrl = () => {
-  // For Railway.app deployment, use the Railway app URL
+  // For production deployment, use the Render app URL
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://your-railway-app.railway.app/api';
+    return process.env.REACT_APP_API_URL || 'https://your-render-app.onrender.com/api';
   }
   
   // In development, use localhost

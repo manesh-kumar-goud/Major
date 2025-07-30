@@ -8,8 +8,6 @@ requests==2.32.4
 python-dateutil>=2.8.2
 Werkzeug>=3.0.0
 python-dotenv==1.0.0
-matplotlib>=3.8.0  # For plotting charts
-joblib>=1.4.0      # For model serialization
-jupyter            # For notebooks (optional)
-# flasgger         # For API docs (optional)
-# dateparser       # For flexible date parsing (optional)
+matplotlib>=3.8.0
+joblib>=1.4.0
+gunicorn>=21.2.0

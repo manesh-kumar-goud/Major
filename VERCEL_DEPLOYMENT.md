@@ -1,185 +1,221 @@
-# Vercel Deployment Guide
+# 🚀 Vercel Deployment Guide
 
-## 🚀 Quick Deployment Steps
+## Frontend Deployment on Vercel
 
 ### Prerequisites
-- GitHub account connected to your repository
+- GitHub repository with your code
 - Vercel account (free tier available)
-- RapidAPI Yahoo Finance API key
+- Backend deployed on Render (or other platform)
 
-### 1. Connect to Vercel
-1. Go to [vercel.com](https://vercel.com)
-2. Sign in with your GitHub account
-3. Click "New Project"
-4. Import your repository: `https://github.com/manesh-kumar-goud/Major.git`
+### Step 1: Prepare Your Repository
 
-### 2. Configure Environment Variables
-In your Vercel project dashboard, go to Settings > Environment Variables and add:
+1. **Ensure your frontend is in the `Major/frontend/` directory**
+2. **Verify these files exist:**
+   - `package.json`
+   - `vercel.json`
+   - `src/config/api.js`
 
-```
-RAPIDAPI_KEY=your_actual_rapidapi_key_here
-```
+### Step 2: Deploy on Vercel
 
-### 3. Deploy
-Click "Deploy" - Vercel will automatically:
-- Build the React frontend
-- Deploy the Flask API as serverless functions
-- Configure routing
+#### Option A: Using Vercel Dashboard
 
-### 4. Access Your App
-Your app will be available at: `https://your-project-name.vercel.app`
+1. **Go to [Vercel Dashboard](https://vercel.com/dashboard)**
+2. **Click "New Project"**
+3. **Import your GitHub repository**
+4. **Configure the project:**
 
-## 📁 Project Structure (Vercel-Optimized)
+   ```
+   Framework Preset: Create React App
+   Root Directory: Major/frontend
+   Build Command: npm run build
+   Output Directory: build
+   Install Command: npm install
+   ```
 
-```
-Major Project/
-├── api/                    # Serverless functions
-│   ├── index.py           # Main API endpoints
-│   └── requirements.txt   # Python dependencies
-├── frontend/              # React application
-│   ├── src/
-│   │   ├── config/
-│   │   │   └── api.js     # API configuration
-│   │   └── pages/         # React components
-│   ├── package.json
-│   └── build/             # Built React app
-├── vercel.json            # Vercel configuration
-├── package.json           # Root package.json
-└── .vercelignore         # Files to ignore
-```
+5. **Set Environment Variables:**
+   ```
+   REACT_APP_API_URL=https://your-render-app.onrender.com/api
+   ```
 
-## 🔧 Configuration Files
+6. **Click "Deploy"**
 
-### vercel.json
-- Configures build process
-- Routes API calls to serverless functions
-- Serves React static files
+#### Option B: Using Vercel CLI
 
-### API Configuration
-- Development: Uses `http://localhost:5000/api`
-- Production: Uses relative path `/api` (Vercel routing)
+1. **Install Vercel CLI:**
+   ```bash
+   npm i -g vercel
+   ```
 
-## 🌟 Features Ready for Production
+2. **Navigate to frontend directory:**
+   ```bash
+   cd Major/frontend
+   ```
 
-### Frontend (React)
-✅ Responsive design with Tailwind CSS
-✅ Interactive charts with Recharts
-✅ Animations with Framer Motion
-✅ Environment-aware API configuration
+3. **Deploy:**
+   ```bash
+   vercel
+   ```
 
-### Backend (Serverless Functions)
-✅ Flask API endpoints
-✅ RapidAPI Yahoo Finance integration
-✅ Mock data fallback for demos
-✅ CORS configured for cross-origin requests
+4. **Follow the prompts and set environment variables**
 
-### API Endpoints Available
-- `GET /api/health` - Health check
-- `GET /api/stock-history` - Historical stock data
-- `GET /api/popular-stocks` - Popular stocks list
-- `POST /api/predict` - Stock predictions
-- `POST /api/compare-models` - Model comparison
-- `GET /api/search` - Stock search
-- `GET /api/metrics` - System metrics
+### Step 3: Configure Environment Variables
 
-## 🛠️ Local Development
+In your Vercel dashboard, set these environment variables:
 
-```bash
-# Install dependencies
-npm install
-cd frontend && npm install
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `REACT_APP_API_URL` | `https://your-render-app.onrender.com/api` | Your Render backend URL |
 
-# Start development
-npm run dev  # Starts frontend on port 3000
+### Step 4: Update API Configuration
 
-# For backend testing (if needed)
-cd backend
-python -m venv venv
-venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-python app.py  # Starts on port 5000
+Make sure your `src/config/api.js` is configured correctly:
+
+```javascript
+const getApiBaseUrl = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.REACT_APP_API_URL || 'https://your-render-app.onrender.com/api';
+  }
+  return process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+};
 ```
 
-## 🚨 Troubleshooting
+### Step 5: Test Your Deployment
 
-### Common Issues
+After deployment, Vercel will provide you with URLs like:
+```
+https://your-app-name.vercel.app
+https://your-app-name-git-main-your-username.vercel.app
+```
 
-1. **Build Fails**
-   - Check Node.js version (requires 18+)
-   - Ensure all dependencies are installed
-   - Verify vercel.json syntax
+Test your application:
+1. **Visit the deployed URL**
+2. **Test the prediction feature**
+3. **Verify API calls work correctly**
 
-2. **API Not Working**
-   - Verify RAPIDAPI_KEY environment variable
-   - Check serverless function logs in Vercel dashboard
-   - Ensure CORS is properly configured
+### Step 6: Custom Domain (Optional)
 
-3. **Frontend Not Loading**
-   - Check if build directory exists
-   - Verify routing in vercel.json
-   - Check browser console for errors
+1. **Go to your Vercel project settings**
+2. **Click "Domains"**
+3. **Add your custom domain**
+4. **Configure DNS settings**
 
-### Vercel Logs
-Access logs in your Vercel dashboard:
-- Functions tab: View serverless function logs
-- Runtime Logs: See build and runtime errors
+### Troubleshooting
 
-## 🔄 Continuous Deployment
+#### Common Issues:
 
-Once connected to GitHub:
-- Push to main branch triggers automatic deployment
-- Preview deployments for pull requests
-- Rollback capabilities in Vercel dashboard
+1. **Build Fails:**
+   - Check `package.json` for correct dependencies
+   - Ensure all imports are correct
+   - Check for TypeScript errors
 
-## 📊 Performance Optimizations
+2. **API Calls Fail:**
+   - Verify `REACT_APP_API_URL` is set correctly
+   - Check CORS configuration on backend
+   - Ensure backend is deployed and running
 
-### Implemented
-- Static file serving from CDN
-- Serverless functions for API
-- Code splitting in React
-- Lazy loading components
-- Optimized images and assets
+3. **Environment Variables Not Working:**
+   - Redeploy after setting environment variables
+   - Check variable names (must start with `REACT_APP_`)
+   - Clear browser cache
+
+4. **Routing Issues:**
+   - Ensure `vercel.json` is configured correctly
+   - Check React Router configuration
+
+#### Performance Tips:
+
+1. **Enable Vercel Analytics** for performance monitoring
+2. **Use Vercel Edge Functions** for API calls if needed
+3. **Optimize images** and assets
+4. **Enable automatic deployments** from GitHub
+
+### Environment Variables Reference
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `REACT_APP_API_URL` | Backend API URL | Yes |
+| `REACT_APP_ENVIRONMENT` | Environment name | No |
 
 ### Monitoring
-- Built-in Vercel Analytics
-- Performance metrics dashboard
-- Function execution time tracking
 
-## 🔐 Security
+- **Analytics:** Available in Vercel dashboard
+- **Performance:** Monitor Core Web Vitals
+- **Deployments:** Automatic deployments from GitHub
+- **Logs:** Function logs and build logs
 
-- Environment variables for sensitive data
-- CORS properly configured
-- No sensitive data in client-side code
-- Rate limiting through RapidAPI
+### Cost
 
-## 💡 Next Steps After Deployment
+- **Free Tier:** $0/month (with limitations)
+- **Pro Plan:** $20/month for advanced features
+- **Enterprise:** Custom pricing
 
-1. **Custom Domain** (Optional)
-   - Add custom domain in Vercel dashboard
-   - Configure DNS settings
+### Advanced Configuration
 
-2. **Environment Management**
-   - Set up staging environment
-   - Configure preview deployments
+#### Custom Build Settings
 
-3. **Monitoring**
-   - Set up alerts for errors
-   - Monitor API usage and costs
+Create a `vercel.json` with custom build settings:
 
-4. **Scaling**
-   - Monitor function execution limits
-   - Upgrade Vercel plan if needed
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build",
+        "installCommand": "npm install",
+        "buildCommand": "npm run build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
+```
 
-## 📞 Support
+#### Environment-Specific Configurations
 
-If you encounter issues:
-1. Check Vercel documentation
-2. Review function logs in dashboard
-3. Test API endpoints individually
-4. Verify environment variables are set
+You can set different environment variables for different environments:
+
+- **Production:** Set in Vercel dashboard
+- **Preview:** Automatic from Git branches
+- **Development:** Use `.env.local` file
+
+### Security
+
+1. **Environment Variables:** Never commit sensitive data
+2. **API Keys:** Store in Vercel environment variables
+3. **CORS:** Configure properly on backend
+4. **HTTPS:** Automatically enabled by Vercel
+
+### Continuous Deployment
+
+1. **Connect GitHub repository**
+2. **Enable automatic deployments**
+3. **Set up branch protection rules**
+4. **Configure preview deployments**
 
 ---
 
-**🎉 Your AI Stock Prediction app is now ready for the world!**
+**Your full-stack application is now deployed!**
+- **Backend:** Running on Render
+- **Frontend:** Running on Vercel
+- **Database:** No database required for this project
+- **Domain:** Custom domain available
 
-Access it at: `https://your-project-name.vercel.app` 
+### Next Steps
+
+1. **Test all features** on the deployed application
+2. **Monitor performance** using Vercel Analytics
+3. **Set up monitoring** for both frontend and backend
+4. **Consider adding a custom domain**
+5. **Set up CI/CD pipelines** for automated testing 

@@ -70,13 +70,15 @@ PERIOD_MAPPING = {
 # Validation function
 def validate_config():
     """Validate that all required environment variables are set"""
-    # Make RAPIDAPI_KEY optional - we can use mock data if it's not available
-    required_vars = ['SECRET_KEY']
+    # Make SECRET_KEY and RAPIDAPI_KEY optional - we can use defaults if not available
+    required_vars = []  # No required vars for development
     missing_vars = []
     
-    for var in required_vars:
-        if not os.getenv(var):
-            missing_vars.append(var)
+    # Check if SECRET_KEY is available
+    if not os.getenv('SECRET_KEY'):
+        print("⚠️  Warning: SECRET_KEY not configured - using default development key")
+    else:
+        print("✅ SECRET_KEY configured")
     
     # Check if RAPIDAPI_KEY is available
     if not os.getenv('RAPIDAPI_KEY') or os.getenv('RAPIDAPI_KEY') == 'your-rapidapi-key-here':

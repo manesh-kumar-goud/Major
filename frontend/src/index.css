@@ -1,60 +1,156 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  background: radial-gradient(ellipse at 60% 20%, #312e81 0%, #0f172a 60%, #0e7490 100%),
-    linear-gradient(120deg, #0f172a 0%, #312e81 100%);
-  min-height: 100vh;
-  color: #f1f5f9;
-  transition: background 0.7s cubic-bezier(0.4,0,0.2,1);
+@layer base {
+  * {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+  body {
+    @apply bg-background-light dark:bg-background-dark text-gray-900 dark:text-white;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Market Ticker Animation */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
+  
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #101922;
+}
+::-webkit-scrollbar-thumb {
+  background: #233648;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #324d67;
+}
+
+/* Range Slider Styling */
+input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #137fec;
+  cursor: pointer;
+  margin-top: -6px;
+  box-shadow: 0 0 0 2px #101922;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #233648;
+  border-radius: 2px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #324d67;
+}
+
+/* Chart Grid Lines */
+.chart-grid {
+  background-image: linear-gradient(#233648 1px, transparent 1px), linear-gradient(90deg, #233648 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+  background: rgba(22, 32, 42, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Neon Text Effects */
+.neon-text-green {
+  text-shadow: 0 0 15px rgba(0, 255, 157, 0.6), 0 0 30px rgba(0, 255, 157, 0.3);
+}
+
+.neon-text-red {
+  text-shadow: 0 0 15px rgba(255, 42, 109, 0.6), 0 0 30px rgba(255, 42, 109, 0.3);
+}
+
+.neon-text-blue {
+  text-shadow: 0 0 15px rgba(0, 210, 255, 0.6), 0 0 30px rgba(0, 210, 255, 0.3);
+}
+
+/* Tooltip Styles */
+.tooltip-container {
   position: relative;
 }
 
-.dark body {
-  background: radial-gradient(ellipse at 60% 20%, #18181b 0%, #312e81 60%, #0e7490 100%),
-    linear-gradient(120deg, #18181b 0%, #312e81 100%);
-  color: #e0e7ef;
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #6366f1 0%, #a21caf 100%);
-  border-radius: 8px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', 'Inter', sans-serif;
-  letter-spacing: -0.01em;
-}
-
-.scroll-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1c2a38;
+  color: #fff;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
   z-index: 50;
-  transition: width 0.2s cubic-bezier(0.4,0,0.2,1);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: opacity 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-.noise-bg {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.12;
-  background: url('https://www.transparenttextures.com/patterns/noise.png');
-  mix-blend-mode: soft-light;
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1c2a38 transparent transparent transparent;
 }

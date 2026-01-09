@@ -19,12 +19,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose port
-EXPOSE 8000
+EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=production
-ENV PORT=8000
+ENV PYTHONUNBUFFERED=1
+ENV PORT=5000
 
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "wsgi:app"] 
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]

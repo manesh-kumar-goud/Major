@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StockNeuro Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#1e293b",
+                        "surface-darker": "#111a22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for clean dark look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101922; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233648; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #137fec; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Sidebar -->
+<aside class="hidden lg:flex w-64 flex-col border-r border-[#233648] bg-[#111a22]">
+<div class="flex h-16 items-center px-6 border-b border-[#233648]">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl">neurology</span>
+<span class="text-xl font-bold tracking-tight text-white">StockNeuro</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 py-6">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 rounded-lg bg-primary px-4 py-3 text-white shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-400 hover:bg-[#233648] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">model_training</span>
+<span class="text-sm font-medium">Model Training</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-400 hover:bg-[#233648] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">compare_arrows</span>
+<span class="text-sm font-medium">LSTM vs RNN</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-400 hover:bg-[#233648] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="text-sm font-medium">Data Sets</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-400 hover:bg-[#233648] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">api</span>
+<span class="text-sm font-medium">API Keys</span>
+</a>
+</li>
+</ul>
+<div class="mt-8 px-4">
+<p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">System</p>
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-400 hover:bg-[#233648] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-400 hover:bg-[#233648] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<div class="border-t border-[#233648] p-4">
+<div class="flex items-center gap-3 rounded-lg bg-[#1e293b] p-3">
+<div class="h-10 w-10 overflow-hidden rounded-full bg-slate-700 bg-cover bg-center" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCRALNI-KLgN6MmZ4F2Prk47zarKuaj5NeNcuTieEzUhJng1DSR-TVN8C-fXWeT5RyjdKwAI-A-sE-6qzmtAN-09QW2V63Sz_0RPPIUShq466hgWr1j5rqf7o-_Q1FL2aT66iz_39oyh6Wkd6kfgCrbHFq_DPwkyAozuSq9waCCpWo2m-dElun7LYzPEcG69rZB3-TjW46d1YhrAo_Nx50kkmMcHDeKIV6NvYAcMp7wVQplI2PVvZz370eYXGvUCOLoex-BNHBtTg");'></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-white">Alex Chen</span>
+<span class="text-xs text-slate-400">Lead Data Scientist</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex h-full flex-1 flex-col overflow-x-hidden bg-background-light dark:bg-background-dark">
+<!-- Top Header -->
+<header class="flex h-16 w-full items-center justify-between border-b border-[#233648] bg-[#111a22] px-6 lg:px-10">
+<div class="flex items-center gap-4 lg:hidden">
+<button class="text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-lg font-bold text-white">StockNeuro</span>
+</div>
+<!-- Search / Breadcrumbs placeholder -->
+<div class="hidden lg:flex items-center text-slate-400 text-sm">
+<span>Overview</span>
+<span class="material-symbols-outlined text-base mx-2">chevron_right</span>
+<span class="text-white">Dashboard</span>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<div class="hidden md:flex items-center gap-2 rounded-lg bg-[#233648] px-3 py-1.5 border border-[#334b63]">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+<input class="bg-transparent border-none text-sm text-white focus:ring-0 placeholder-slate-500 w-48" placeholder="Search models..." type="text"/>
+<span class="text-xs text-slate-500 border border-slate-600 rounded px-1.5">⌘K</span>
+</div>
+<button class="relative flex h-10 w-10 items-center justify-center rounded-lg bg-[#233648] text-white hover:bg-[#334b63] transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-[#233648]"></span>
+</button>
+<div class="lg:hidden h-9 w-9 overflow-hidden rounded-full bg-slate-700 bg-cover bg-center" data-alt="User avatar mobile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDE0s2RLmbJKibuHQXyCz0kNY51mYD4IFJaAR0G1rQiyGIBaxHESELrP7s15sqJaXP0Kw_PAD3nxQ0jatLEoJ5U8LJPnKZfzxkpZQ6-nltknxIydMcZ5HxbdOzM118_7yozuyCzmIbT-g5KMD-mMj6yo1q7F4vakE3sqtt09662DP12g1dLiGW2wllk3Ve8rAbrEItM2o7kbO58s-eqNsxl6af3jr_MmH6D8IS80_TY_CiO1uRxMmYBkCEECCAR3GvMOlkJ1Rir7g");'></div>
+</div>
+</header>
+<!-- Main Scrollable Area -->
+<div class="flex-1 overflow-y-auto">
+<div class="flex flex-col w-full max-w-[1400px] mx-auto">
+<!-- Ticker Tape -->
+<div class="w-full border-b border-[#233648] bg-[#16202a] overflow-x-auto no-scrollbar">
+<div class="flex min-w-max items-center gap-4 px-6 py-2">
+<div class="flex items-center gap-x-2 rounded px-2 py-1">
+<span class="material-symbols-outlined text-green-500 text-[18px]">trending_up</span>
+<span class="text-slate-300 text-xs font-mono">S&amp;P 500</span>
+<span class="text-white text-sm font-bold font-mono">4,120.50</span>
+<span class="text-green-500 text-xs font-bold font-mono">(+0.45%)</span>
+</div>
+<div class="h-4 w-[1px] bg-[#233648]"></div>
+<div class="flex items-center gap-x-2 rounded px-2 py-1">
+<span class="material-symbols-outlined text-red-500 text-[18px]">trending_down</span>
+<span class="text-slate-300 text-xs font-mono">NASDAQ</span>
+<span class="text-white text-sm font-bold font-mono">12,340.10</span>
+<span class="text-red-500 text-xs font-bold font-mono">(-0.12%)</span>
+</div>
+<div class="h-4 w-[1px] bg-[#233648]"></div>
+<div class="flex items-center gap-x-2 rounded px-2 py-1">
+<span class="material-symbols-outlined text-green-500 text-[18px]">trending_up</span>
+<span class="text-slate-300 text-xs font-mono">DJI</span>
+<span class="text-white text-sm font-bold font-mono">33,500.25</span>
+<span class="text-green-500 text-xs font-bold font-mono">(+0.20%)</span>
+</div>
+<div class="h-4 w-[1px] bg-[#233648]"></div>
+<div class="flex items-center gap-x-2 rounded px-2 py-1">
+<span class="material-symbols-outlined text-green-500 text-[18px]">trending_up</span>
+<span class="text-slate-300 text-xs font-mono">BTC/USD</span>
+<span class="text-white text-sm font-bold font-mono">64,230.00</span>
+<span class="text-green-500 text-xs font-bold font-mono">(+1.45%)</span>
+</div>
+<div class="h-4 w-[1px] bg-[#233648]"></div>
+<div class="flex items-center gap-x-2 rounded px-2 py-1">
+<span class="material-symbols-outlined text-red-500 text-[18px]">trending_down</span>
+<span class="text-slate-300 text-xs font-mono">ETH/USD</span>
+<span class="text-white text-sm font-bold font-mono">3,120.50</span>
+<span class="text-red-500 text-xs font-bold font-mono">(-0.85%)</span>
+</div>
+</div>
+</div>
+<div class="p-6 lg:p-10 space-y-8">
+<!-- Hero Section -->
+<div class="rounded-2xl overflow-hidden relative border border-[#233648] bg-[#1e293b]">
+<div class="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" data-alt="Abstract blue neural network visualization" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAb7n9vy8a8gfzop8-_M7eqSV3mfrnN6mEWOCosY-q14r6Q1BfVtHtELgqfZnsYE_dATdyUVnoK_MWi-gRt6SfmWVfIT7wDiR-CrpV4RX13yrc8FkUGYUPWhjDs2kLFag03tg9zIBmvI1SLdDhBlLNmTflQN1C7ywqunCimPHpWm0bFtt65h4-Ki92tHp6V-yNUY5gd8sOkx4BQAzcjYEtWuVd6SEmT04rV5Pwfls_I2etiUohhrTP2kWLyTmO7w9d405xAF2XF7Q");'></div>
+<div class="absolute inset-0 bg-gradient-to-r from-[#111a22] via-[#111a22]/90 to-transparent"></div>
+<div class="relative z-10 flex flex-col items-start justify-center p-8 lg:p-12 min-h-[320px]">
+<div class="inline-flex items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary mb-4 border border-primary/20">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                                    System Online
+                                </div>
+<h1 class="text-white text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-4 max-w-2xl">
+                                    Welcome back, Analyst. <br/>
+<span class="text-slate-400 font-normal">Your models are ready for deployment.</span>
+</h1>
+<p class="text-slate-300 text-sm lg:text-base font-medium mb-8 font-body max-w-xl">
+                                    GPU Cluster: <span class="text-green-400">Online (8/8 Active)</span>  |  API Quota: <span class="text-yellow-400">85% Remaining</span>  |  Last Sync: 2 mins ago
+                                </p>
+<div class="flex gap-4">
+<button class="flex items-center justify-center gap-2 rounded-lg bg-primary h-12 px-6 text-white text-sm font-bold tracking-wide hover:bg-blue-600 transition-all shadow-[0_0_20px_rgba(19,127,236,0.3)]">
+<span class="material-symbols-outlined text-[20px]">monitor_heart</span>
+                                        View System Health
+                                    </button>
+<button class="flex items-center justify-center gap-2 rounded-lg bg-[#233648] h-12 px-6 text-white text-sm font-bold tracking-wide hover:bg-[#334b63] transition-all border border-[#334b63]">
+<span class="material-symbols-outlined text-[20px]">history</span>
+                                        View Logs
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Quick Actions Grid -->
+<div>
+<div class="flex items-center justify-between mb-5">
+<h2 class="text-white text-xl font-bold tracking-tight">Quick Actions</h2>
+<button class="text-primary text-sm font-bold hover:underline">Customize</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Card 1 -->
+<div class="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#233648] bg-[#1e293b] p-6 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5 cursor-pointer h-48">
+<div class="absolute right-0 top-0 h-32 w-32 translate-x-8 translate-y--8 rounded-full bg-primary/10 blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="z-10 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20 text-primary mb-4">
+<span class="material-symbols-outlined text-3xl">rocket_launch</span>
+</div>
+<div class="z-10">
+<h3 class="text-white text-lg font-bold mb-1">New Prediction</h3>
+<p class="text-slate-400 text-sm font-body">Initialize a new LSTM or RNN model run on fresh datasets.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#233648] bg-[#1e293b] p-6 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5 cursor-pointer h-48">
+<div class="absolute right-0 top-0 h-32 w-32 translate-x-8 translate-y--8 rounded-full bg-purple-500/10 blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
+<div class="z-10 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-500/20 text-purple-400 mb-4">
+<span class="material-symbols-outlined text-3xl">compare_arrows</span>
+</div>
+<div class="z-10">
+<h3 class="text-white text-lg font-bold mb-1">Compare Models</h3>
+<p class="text-slate-400 text-sm font-body">Side-by-side analysis of LSTM vs RNN accuracy and loss metrics.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#233648] bg-[#1e293b] p-6 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5 cursor-pointer h-48">
+<div class="absolute right-0 top-0 h-32 w-32 translate-x-8 translate-y--8 rounded-full bg-emerald-500/10 blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+<div class="z-10 flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400 mb-4">
+<span class="material-symbols-outlined text-3xl">ssid_chart</span>
+</div>
+<div class="z-10">
+<h3 class="text-white text-lg font-bold mb-1">Market Analysis</h3>
+<p class="text-slate-400 text-sm font-body">Visualize general market trends and sentiment analysis.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity / Table Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Table -->
+<div class="lg:col-span-2 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="text-white text-xl font-bold tracking-tight">Recent Model Runs</h2>
+<button class="flex items-center gap-1 text-slate-400 hover:text-white text-sm font-bold">
+                                        View All
+                                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-hidden rounded-xl border border-[#233648] bg-[#1e293b]">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-400">
+<thead class="bg-[#16202a] text-xs uppercase text-slate-300">
+<tr>
+<th class="px-6 py-4 font-bold tracking-wider">Model ID</th>
+<th class="px-6 py-4 font-bold tracking-wider">Architecture</th>
+<th class="px-6 py-4 font-bold tracking-wider">Dataset</th>
+<th class="px-6 py-4 font-bold tracking-wider">Accuracy</th>
+<th class="px-6 py-4 font-bold tracking-wider">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#233648]">
+<tr class="hover:bg-[#233648]/50 transition-colors">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">#Run-4920</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded bg-blue-500/10 px-2 py-1 text-xs font-bold text-blue-400 border border-blue-500/20">LSTM</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4">S&amp;P 500 (10Y)</td>
+<td class="whitespace-nowrap px-6 py-4 text-green-400 font-bold">94.2%</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-1.5 rounded-full bg-green-500"></div>
+<span class="text-white">Completed</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-[#233648]/50 transition-colors">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">#Run-4919</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded bg-purple-500/10 px-2 py-1 text-xs font-bold text-purple-400 border border-purple-500/20">RNN</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4">NASDAQ (5Y)</td>
+<td class="whitespace-nowrap px-6 py-4 text-green-400 font-bold">89.1%</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-1.5 rounded-full bg-green-500"></div>
+<span class="text-white">Completed</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-[#233648]/50 transition-colors">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">#Run-4918</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded bg-blue-500/10 px-2 py-1 text-xs font-bold text-blue-400 border border-blue-500/20">LSTM</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4">Forex EUR/USD</td>
+<td class="whitespace-nowrap px-6 py-4 text-slate-500">--</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
+<span class="text-white">Training...</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-[#233648]/50 transition-colors">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">#Run-4917</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded bg-purple-500/10 px-2 py-1 text-xs font-bold text-purple-400 border border-purple-500/20">RNN</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4">Crypto BTC</td>
+<td class="whitespace-nowrap px-6 py-4 text-red-400 font-bold">Failed</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-1.5 rounded-full bg-red-500"></div>
+<span class="text-white">Error</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Mini Chart / Stats -->
+<div class="flex flex-col gap-4">
+<h2 class="text-white text-xl font-bold tracking-tight">Resource Usage</h2>
+<div class="rounded-xl border border-[#233648] bg-[#1e293b] p-6 flex flex-col gap-6 h-full">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm font-bold text-white">
+<span>GPU Load</span>
+<span class="text-primary">78%</span>
+</div>
+<div class="h-2 w-full rounded-full bg-[#111a22]">
+<div class="h-2 w-[78%] rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm font-bold text-white">
+<span>Memory (RAM)</span>
+<span class="text-purple-400">42%</span>
+</div>
+<div class="h-2 w-full rounded-full bg-[#111a22]">
+<div class="h-2 w-[42%] rounded-full bg-purple-500"></div>
+</div>
+</div>
+<div class="mt-auto rounded-lg bg-[#111a22] p-4 border border-[#233648]">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-yellow-500 mt-0.5">warning</span>
+<div>
+<h4 class="text-sm font-bold text-white">Maintenance Scheduled</h4>
+<p class="text-xs text-slate-400 mt-1">The GPU cluster will undergo maintenance on Nov 14, 02:00 UTC.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

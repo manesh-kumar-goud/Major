@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-08T14:19:06.900012",
+    "last_price": 431.41,
+    "predicted_price": 429.56124330163,
+    "metrics": {
+      "rmse": 0.06313136212331903,
+      "mae": 0.05004845878800325,
+      "mape": 8.158482534507927,
+      "smape": 8.4428670565525,
+      "r2_score": 0.8847411121363582,
+      "mase": 2.8332328872958805,
+      "accuracy": 37.238493723849366,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 2,
+    "ticker": "GOOGL",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-08T14:29:56.542321",
+    "last_price": 321.98,
+    "predicted_price": 314.5449093091488,
+    "metrics": {
+      "rmse": 0.031254314522596895,
+      "mae": 0.024297811792322353,
+      "mape": 4.772367741332408,
+      "smape": 4.8148575467028,
+      "r2_score": 0.9806352551403331,
+      "mase": 3.1948294001347506,
+      "accuracy": 61.08786610878661,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 3,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-08T14:43:16.652728",
+    "last_price": 431.41,
+    "predicted_price": 445.9622117388248,
+    "metrics": {
+      "rmse": 0.05031332928501771,
+      "mae": 0.03913006461987541,
+      "mape": 6.735588034496337,
+      "smape": 6.6360806196077275,
+      "r2_score": 0.9267934033393894,
+      "mase": 2.2151448545628045,
+      "accuracy": 51.04602510460251,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 4,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-08T14:43:57.579356",
+    "last_price": 431.41,
+    "predicted_price": 431.5675365674495,
+    "metrics": {
+      "rmse": 0.0561326107301275,
+      "mae": 0.0439738506442691,
+      "mape": 7.300246902370085,
+      "smape": 7.502705692908414,
+      "r2_score": 0.9088798158657669,
+      "mase": 2.4893505782888257,
+      "accuracy": 45.18828451882845,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 5,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-09T09:35:12.930818",
+    "last_price": 435.8,
+    "predicted_price": 439.0045161283016,
+    "metrics": {
+      "rmse": 0.052578689420378515,
+      "mae": 0.04114002053288181,
+      "mape": 7.0371610261431945,
+      "smape": 6.976620921058258,
+      "r2_score": 0.9203656025842499,
+      "mase": 2.3270636687621047,
+      "accuracy": 48.95397489539749,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 6,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-09T09:45:58.845919",
+    "last_price": 435.8,
+    "predicted_price": 417.5313117229938,
+    "metrics": {
+      "rmse": 0.06996777226944337,
+      "mae": 0.05732090644105979,
+      "mape": 9.088157798416539,
+      "smape": 9.55192622955818,
+      "r2_score": 0.8589811145863478,
+      "mase": 3.24232698748627,
+      "accuracy": 31.380753138075313,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 7,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-09T09:50:43.130553",
+    "last_price": 435.8,
+    "predicted_price": 415.80516586542126,
+    "metrics": {
+      "rmse": 0.06747680057367583,
+      "mae": 0.05504198188043195,
+      "mape": 8.77324752866109,
+      "smape": 9.20787597703418,
+      "r2_score": 0.8688434001526082,
+      "mase": 3.113420815826778,
+      "accuracy": 33.89121338912134,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 8,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-09T09:58:40.864103",
+    "last_price": 435.8,
+    "predicted_price": 435.6195134949684,
+    "metrics": {
+      "rmse": 0.051418438497173174,
+      "mae": 0.0402529871957391,
+      "mape": 6.82480656343116,
+      "smape": 6.8421830362572695,
+      "r2_score": 0.9238413999767539,
+      "mase": 2.276889093613418,
+      "accuracy": 49.7907949790795,
+      "model_type": "LSTM"
+    },
+    "period": "2y",
+    "prediction_days": 30
+  },
+  {
+    "id": 9,
+    "ticker": "TSLA",
+    "model_type": "LSTM",
+    "timestamp": "2026-01-09T10:08:34.108280",
+    "last_price": 435.8,
+    "predicted_price": 435.3133106255531,
+    "metrics": {
+      "rmse": 0.055568945212623705,
+      "mae": 0.04361654711580486,
+      "mape": 7.359534762258906,
+      "smape": 7.388247745309491,
+      "r2_score": 0.9110500944308834,
+      "mase": 2.4671470950996683,
+      "accuracy": 45.60669456066946,
+      "model_type": "LSTM"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 10,
+    "ticker": "TSLA",
+    "model_type": "RNN",
+    "timestamp": "2026-01-09T10:11:50.060820",
+    "last_price": 435.8,
+    "predicted_price": 387.9718802785873,
+    "metrics": {
+      "rmse": 0.09143269918136039,
+      "mae": 0.07490243211813777,
+      "mape": 11.066698320622457,
+      "smape": 11.824720061282406,
+      "r2_score": 0.7591845944568173,
+      "mase": 4.236816759600885,
+      "accuracy": 22.17573221757322,
+      "model_type": "RNN"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 11,
+    "ticker": "TSLA",
+    "model_type": "RNN",
+    "timestamp": "2026-01-09T10:14:09.294245",
+    "last_price": 435.8,
+    "predicted_price": 416.2587584483623,
+    "metrics": {
+      "rmse": 0.05143751232185005,
+      "mae": 0.04124444114175049,
+      "mape": 6.792306549756703,
+      "smape": 6.8383681920489074,
+      "r2_score": 0.923784886972596,
+      "mase": 2.332970165696741,
+      "accuracy": 48.11715481171548,
+      "model_type": "RNN"
+    },
+    "period": "1mo",
+    "prediction_days": 30
+  },
+  {
+    "id": 12,
+    "ticker": "TSLA",
+    "model_type": "RNN",
+    "timestamp": "2026-01-09T10:17:25.122472",
+    "last_price": 435.8,
+    "predicted_price": 408.1479550790786,
+    "metrics": {
+      "rmse": 0.05979091968535968,
+      "mae": 0.050023547986600914,
+      "mape": 8.091795910149402,
+      "smape": 8.371395216116435,
+      "r2_score": 0.8970202929232267,
+      "mase": 2.8295557365887998,
+      "accuracy": 30.962343096234306,
+      "model_type": "RNN"
+    },
+    "period": "1y",
+    "prediction_days": 30
+  }
+]

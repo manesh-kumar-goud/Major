@@ -1,248 +1,311 @@
 # 🚀 Intelligent Stock Market Forecasting Using Deep Learning
 
-> **A Comparative Analysis of LSTM and RNN Models**
+> **Modernized Version 2.0 - A Comparative Analysis of LSTM and RNN Models**
 
-![Demo](https://img.shields.io/badge/Demo-Live-brightgreen)
-![Python](https://img.shields.io/badge/Python-3.8+-blue)
+![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![React](https://img.shields.io/badge/React-18+-blue)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.13+-orange)
-![Flask](https://img.shields.io/badge/Flask-2.3+-green)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.18+-orange)
+![Vite](https://img.shields.io/badge/Vite-5.4+-purple)
 
-A comprehensive web application that compares LSTM and RNN deep learning models for stock market prediction. Built with Flask backend and React frontend, integrated with **RapidAPI Yahoo Finance** for real-time market data.
+A modern, production-ready web application that compares LSTM and RNN deep learning models for stock market prediction. Built with **FastAPI** backend and **React 18 + Vite** frontend, featuring async operations, JWT authentication, and optimized model inference.
 
-## 🚀 Features
+## ✨ Key Features
 
-- **Real-time Stock Data**: Integrated with RapidAPI Yahoo Finance API
-- **Deep Learning Models**: Compare LSTM vs RNN performance
-- **Interactive Predictions**: Visualize future stock price forecasts
-- **Model Comparison**: Side-by-side analysis of model performance
-- **Popular Stocks**: Quick access to trending stocks
-- **Insider Trading Data**: Access to insider trading information
-- **Responsive UI**: Modern dark theme with animations
-- **Technical Indicators**: Advanced market analysis
+### Core Functionality
+- **🤖 Deep Learning Models**: LSTM and RNN implementations with optimized training
+- **📊 Real-time Stock Data**: Integrated with RapidAPI Yahoo Finance (with mock data fallback)
+- **📈 Interactive Predictions**: Visualize future stock price forecasts with Recharts
+- **⚖️ Model Comparison**: Side-by-side analysis with comprehensive metrics (RMSE, MAE, R², Accuracy)
+- **📉 Performance Benchmarks**: Detailed model performance metrics and comparisons
+- **💾 CSV Export**: Export predictions for further analysis
+
+### Modern Features
+- **🔐 JWT Authentication**: Secure user authentication and authorization
+- **🌓 Dark/Light Theme**: Beautiful theme toggle with smooth transitions
+- **📱 Fully Responsive**: Mobile-first design with Tailwind CSS
+- **🎨 Modern UI**: Framer Motion animations and professional design
+- **⚡ Fast Builds**: Vite for lightning-fast development and builds
+- **🐳 Docker Support**: Easy deployment with Docker and Docker Compose
+- **🔄 CI/CD Pipeline**: Automated testing and deployment with GitHub Actions
+- **🧪 Unit Tests**: Comprehensive test coverage with Pytest
 
 ## 🛠️ Tech Stack
 
 ### Backend
-- **Flask**: Web framework
-- **TensorFlow/Keras**: Deep learning models
-- **RapidAPI Yahoo Finance**: Market data provider
-- **NumPy & Pandas**: Data processing
-- **Scikit-learn**: Machine learning utilities
+- **FastAPI 0.115+**: Modern, fast web framework with async support
+- **Python 3.11+**: Latest Python features and performance
+- **TensorFlow 2.18 / Keras 3.3**: Latest deep learning frameworks
+- **Uvicorn**: ASGI server for production
+- **Pydantic**: Data validation and settings management
+- **JWT**: Secure authentication with python-jose
+- **Pytest**: Testing framework with async support
 
 ### Frontend
-- **React**: User interface
-- **Tailwind CSS**: Styling
-- **Recharts**: Data visualization
-- **Framer Motion**: Animations
-- **Axios**: API client
+- **React 18.3+**: Latest React with concurrent features
+- **Vite 5.4+**: Next-generation frontend tooling
+- **Tailwind CSS 3.4+**: Utility-first CSS framework
+- **Recharts 2.12+**: Composable charting library
+- **Framer Motion 11.3+**: Production-ready motion library
+- **Zustand**: Lightweight state management
+- **Axios**: Promise-based HTTP client
+- **React Router 6**: Declarative routing
 
 ## 📁 Project Structure
 
 ```
-📦 Major Project/
-├── 🔧 backend/                 # Flask API Server
-│   ├── app.py                  # Main Flask application
-│   ├── models.py               # LSTM & RNN model implementations
-│   ├── utils.py                # Data preprocessing utilities
-│   ├── api_client.py           # RapidAPI client
-│   ├── config.py               # API configuration
-│   ├── test_api.py             # API testing script
-│   └── requirements.txt        # Python dependencies
-├── 🖥️ frontend/                # React Web Application
+📦 Stock Market Forecasting/
+├── 🔧 backend/                    # FastAPI Backend
+│   ├── api/
+│   │   └── routes/               # API route handlers
+│   │       ├── auth.py           # Authentication endpoints
+│   │       ├── stocks.py         # Stock data endpoints
+│   │       ├── predictions.py   # Prediction endpoints
+│   │       ├── benchmarks.py    # Benchmark endpoints
+│   │       └── health.py         # Health check
+│   ├── core/
+│   │   ├── config.py             # Configuration management
+│   │   ├── security.py           # JWT & password hashing
+│   │   ├── logging.py            # Logging setup
+│   │   └── database.py           # Cache/database init
+│   ├── services/
+│   │   ├── stock_service.py      # Stock data service
+│   │   ├── prediction_service.py # Prediction service
+│   │   ├── benchmark_service.py  # Benchmark service
+│   │   ├── api_client.py         # Async API client
+│   │   └── mock_data.py          # Mock data fallback
+│   ├── ml/
+│   │   ├── models.py             # LSTM & RNN models
+│   │   └── utils.py              # ML utilities
+│   ├── tests/
+│   │   └── test_api.py           # API tests
+│   ├── app.py                    # FastAPI application
+│   ├── requirements.txt          # Python dependencies
+│   ├── Dockerfile                # Docker configuration
+│   └── pytest.ini                # Test configuration
+│
+├── 🖥️ frontend/                   # React Frontend
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── Home.jsx        # Landing page with animations
-│   │   │   ├── Prediction.jsx  # Main prediction interface
-│   │   │   ├── Comparison.jsx  # Model comparison dashboard
-│   │   │   ├── About.jsx       # Project information
-│   │   │   └── Contact.jsx     # Contact information
-│   │   ├── components/         # Reusable UI components
-│   │   └── context/           # React context providers
-│   └── package.json           # Node.js dependencies
-└── README.md                  # This file
+│   │   │   ├── Home.jsx          # Landing page
+│   │   │   ├── Prediction.jsx   # Prediction interface
+│   │   │   ├── Comparison.jsx   # Model comparison
+│   │   │   ├── Benchmarks.jsx    # Performance benchmarks
+│   │   │   ├── About.jsx        # About page
+│   │   │   └── Login.jsx        # Authentication
+│   │   ├── components/
+│   │   │   └── Layout.jsx       # Main layout
+│   │   ├── contexts/
+│   │   │   ├── ThemeContext.jsx  # Theme management
+│   │   │   └── AuthContext.jsx  # Authentication context
+│   │   ├── services/
+│   │   │   └── api.js            # API client
+│   │   ├── App.jsx               # Root component
+│   │   └── main.jsx              # Entry point
+│   ├── package.json              # Node dependencies
+│   ├── vite.config.js            # Vite configuration
+│   ├── tailwind.config.js        # Tailwind configuration
+│   └── Dockerfile                # Docker configuration
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml                # CI/CD pipeline
+├── docker-compose.yml            # Docker Compose setup
+└── README.md                      # This file
 ```
 
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 14+
-- RapidAPI Yahoo Finance subscription
+- **Python 3.11+**
+- **Node.js 20+**
+- **Docker & Docker Compose** (optional, for containerized deployment)
+- **RapidAPI Yahoo Finance API Key** (optional, uses mock data if not provided)
 
-### Backend Setup
+### Quick Start with Docker
 
-1. **Navigate to backend directory**
-   ```bash
-   cd backend
-   ```
-
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate  # Windows
-   # source venv/bin/activate  # macOS/Linux
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configure API** (Already configured with your key):
-   - RapidAPI Host: `yahoo-finance15.p.rapidapi.com`
-   - API Key: Configured in `config.py`
-
-5. **Test API connection**:
-   ```bash
-   python test_api.py
-   ```
-
-6. **Start backend server**
-   ```bash
-   python app.py
-   ```
-   The backend will start on `http://localhost:5000`
-
-### Frontend Setup (React)
-
-1. **Navigate to frontend directory**
-   ```bash
-   cd frontend
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm start
-   ```
-   The frontend will start on `http://localhost:3000`
-
-### Quick Start (Both Services)
-
-Use the launcher script from the project root:
 ```bash
-python backend/run.py full
+# Clone the repository
+git clone <repository-url>
+cd Major
+
+# Copy environment file
+cp backend/.env.example backend/.env
+
+# Edit backend/.env and add your RapidAPI key (optional)
+# RAPIDAPI_KEY=your-key-here
+
+# Start services
+docker-compose up -d
+
+# Backend will be available at http://localhost:5000
+# Frontend will be available at http://localhost:5173
 ```
 
-## 🔗 API Endpoints
+### Manual Setup
 
-### Stock Data
-- `GET /api/stock-history?ticker=AAPL&period=1y` - Get historical stock data
-- `GET /api/popular-stocks` - Get popular stocks with current prices
-- `GET /api/search?q=Apple` - Search stocks
+#### Backend Setup
+
+```bash
+# Navigate to backend
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Create .env file from example
+cp .env.example .env
+
+# Edit .env and configure:
+# - RAPIDAPI_KEY (optional)
+# - SECRET_KEY (for production)
+# - CORS_ORIGINS
+
+# Run the server
+uvicorn app:app --reload --host 0.0.0.0 --port 5000
+```
+
+#### Frontend Setup
+
+```bash
+# Navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Create .env file (optional)
+echo "VITE_API_URL=http://localhost:5000/api" > .env
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 🔐 Authentication
+
+The application includes JWT-based authentication:
+
+### Default Credentials
+- **Username**: `admin`
+- **Password**: `admin123`
+
+### Register New User
+Use the `/api/auth/register` endpoint or the Login page to create a new account.
+
+## 📡 API Endpoints
+
+### Health
+- `GET /api/health` - Health check
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login and get token
+- `GET /api/auth/me` - Get current user (requires auth)
+
+### Stocks
+- `GET /api/stocks/history?ticker=AAPL&period=1y` - Get historical data
+- `GET /api/stocks/popular` - Get popular stocks
+- `GET /api/stocks/search?q=Apple` - Search stocks
+- `GET /api/stocks/quote/{ticker}` - Get stock quote
 
 ### Predictions
-- `POST /api/predict` - Make stock predictions using LSTM or RNN
-- `POST /api/compare-models` - Compare LSTM vs RNN performance
+- `POST /api/predictions/predict` - Make prediction
+- `POST /api/predictions/compare` - Compare models
+- `POST /api/predictions/export` - Export predictions as CSV
 
-### Market Data
-- `GET /api/insider-trades` - Insider trading data
-- `GET /api/trending-stocks` - Trending stocks
-- `GET /api/metrics` - Get system metrics and model information
+### Benchmarks
+- `GET /api/benchmarks/performance` - Get performance benchmarks
+- `GET /api/benchmarks/metrics` - Get system metrics
 
-## 📊 API Configuration
+### API Documentation
+- **Swagger UI**: `http://localhost:5000/api/docs`
+- **ReDoc**: `http://localhost:5000/api/redoc`
 
-The application uses RapidAPI Yahoo Finance with the following configuration:
+## 🧪 Testing
 
-```python
-RAPIDAPI_CONFIG = {
-    'base_url': 'https://yahoo-finance15.p.rapidapi.com/api/v1',
-    'headers': {
-        'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com',
-        'X-RapidAPI-Key': 'your-api-key'
-    }
-}
+### Backend Tests
+
+```bash
+cd backend
+pytest tests/ -v
+pytest tests/ --cov=. --cov-report=html
 ```
 
-## 🤖 Model Architecture
+### Frontend Tests
+
+```bash
+cd frontend
+npm run lint
+```
+
+## 🐳 Docker Deployment
+
+### Development
+
+```bash
+docker-compose up
+```
+
+### Production
+
+```bash
+# Build images
+docker-compose build
+
+# Run in detached mode
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+## 🚀 Deployment
+
+### Backend (Render/Railway/Fly.io)
+
+1. Set environment variables in your hosting platform
+2. Set build command: `pip install -r requirements.txt`
+3. Set start command: `uvicorn app:app --host 0.0.0.0 --port $PORT`
+
+### Frontend (Vercel/Netlify)
+
+1. Set build command: `npm run build`
+2. Set output directory: `dist`
+3. Set environment variable: `VITE_API_URL=https://your-backend-url.com/api`
+
+## 📊 Model Performance
 
 ### LSTM Model
-- Input sequences of 60 days
-- 2 LSTM layers (50 units each)
-- Dropout layers (0.2)
-- Dense output layer
+- **Accuracy**: ~92.5%
+- **RMSE**: ~0.0234
+- **Training Time**: ~12 minutes
+- **Inference Speed**: ~150ms
 
 ### RNN Model
-- Simple RNN architecture
-- 50 units with 2 layers
-- Comparable performance metrics
+- **Accuracy**: ~87.3%
+- **RMSE**: ~0.0345
+- **Training Time**: ~4 minutes
+- **Inference Speed**: ~45ms
 
-## 📈 Performance Metrics
+## 🔒 Security Features
 
-Both models are evaluated using:
-- **RMSE**: Root Mean Square Error
-- **MAE**: Mean Absolute Error  
-- **R² Score**: Coefficient of determination
-- **Accuracy**: Directional accuracy
-
-## 🎯 Usage Examples
-
-### Basic Prediction
-1. Navigate to the **Prediction** page
-2. Enter a stock ticker (e.g., `AAPL`)
-3. Select model type (`LSTM` or `RNN`)
-4. Choose historical period (`1y`)
-5. Set forecast days (`30`)
-6. Click **"Predict Stock Price"**
-
-### Model Comparison
-1. Go to the **Prediction** page
-2. Enter stock ticker and period
-3. Click **"Compare LSTM vs RNN"**
-4. View side-by-side performance metrics
-5. Analyze which model performs better
-
-### Explore Features
-1. Visit the **Comparison** page for detailed model analysis
-2. Check the **Home** page for project overview
-3. Browse popular stocks for quick predictions
-
-## 🔧 Configuration
-
-### Backend Configuration
-Edit `backend/app.py` to modify:
-- API endpoints
-- Model parameters
-- Data processing settings
-- CORS settings
-
-### Frontend Configuration
-Edit `frontend/src/pages/Prediction.jsx` to modify:
-- API base URL
-- Chart settings
-- UI themes
-- Default parameters
-
-## 📊 Performance Benchmarks
-
-| Metric | LSTM | RNN |
-|--------|------|-----|
-| Accuracy | 92.5% | 87.3% |
-| RMSE | 0.0234 | 0.0345 |
-| Training Time | 12 min | 4 min |
-| Memory Usage | 2.1 GB | 0.8 GB |
-| Inference Speed | 150ms | 45ms |
-
-## 🛠️ Technical Stack
-
-### Backend
-- **Flask**: Web framework
-- **TensorFlow/Keras**: Deep learning models
-- **RapidAPI Yahoo Finance**: Market data provider
-- **NumPy/Pandas**: Data processing
-- **Scikit-learn**: Machine learning utilities
-
-### Frontend
-- **React**: UI framework
-- **Recharts**: Data visualization
-- **Framer Motion**: Animations
-- **Tailwind CSS**: Styling
-- **Axios**: HTTP client
+- JWT-based authentication
+- Password hashing with bcrypt
+- CORS configuration
+- Environment variable management
+- Input validation with Pydantic
+- Secure API key storage
 
 ## 🤝 Contributing
 
@@ -254,55 +317,21 @@ Edit `frontend/src/pages/Prediction.jsx` to modify:
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
-## 🆘 Troubleshooting
+## 🙏 Acknowledgments
 
-### Common Issues
-
-**Backend Issues:**
-- `ModuleNotFoundError`: Install missing dependencies with `pip install -r requirements.txt`
-- `Port 5000 already in use`: Change port in `app.py` or kill existing process
-- `CORS errors`: Ensure Flask-CORS is installed and configured
-
-**Frontend Issues:**
-- `npm install` fails: Try `npm install --legacy-peer-deps`
-- `Connection refused`: Ensure backend is running on port 5000
-- Chart not displaying: Check if data is being received from API
-
-**Model Issues:**
-- Low accuracy: Try different hyperparameters or longer training periods
-- Memory errors: Reduce batch size or sequence length
-- Slow predictions: Consider using RNN for faster inference
-
-### Debug Mode
-Enable debug mode in `app.py`:
-```python
-app.run(debug=True, host='0.0.0.0', port=5000)
-```
-
-## 📚 Additional Resources
-
-- [TensorFlow Documentation](https://www.tensorflow.org/)
-- [React Documentation](https://reactjs.org/)
-- [RapidAPI Yahoo Finance](https://rapidapi.com/yahoo-finance/api/yahoo-finance15/)
-- [LSTM vs RNN Comparison](https://en.wikipedia.org/wiki/Long_short-term_memory)
-
-## 👥 Team
-
-- **Your Name** - Full Stack Developer & AI Engineer
-- **Project Type** - Academic Research / Major Project
-- **Institution** - Your University/Organization
-
-## 🌟 Acknowledgments
-
-- RapidAPI for providing free stock data
+- RapidAPI for providing stock market data
 - TensorFlow team for the deep learning framework
-- React community for the amazing frontend ecosystem
-- All contributors and supporters of this project
+- React and Vite communities
+- All contributors and supporters
+
+## 📞 Support
+
+For issues, questions, or contributions, please open an issue on GitHub.
 
 ---
 
 **⭐ Star this repository if you found it helpful!**
 
-*Built with ❤️ for the future of financial AI* 
+*Built with ❤️ using modern web technologies*

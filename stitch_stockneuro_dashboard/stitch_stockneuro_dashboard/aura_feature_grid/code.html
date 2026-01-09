@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura - AI Design Studio</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-surface": "rgba(255, 255, 255, 0.03)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111a22; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233648; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #137fec; 
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(17, 26, 34, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(19, 127, 236, 0.5);
+            box-shadow: 0 0 25px rgba(19, 127, 236, 0.15), inset 0 0 20px rgba(19, 127, 236, 0.05);
+            transform: translateY(-4px);
+        }
+
+        /* Neomorphism for Icons/Buttons in Dark Mode */
+        .neo-inset {
+            background: #131d27;
+            box-shadow: inset 3px 3px 6px rgba(0,0,0,0.5), inset -1px -1px 4px rgba(255,255,255,0.05);
+        }
+
+        .neo-flat {
+            background: #15202b;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.3), -2px -2px 6px rgba(255,255,255,0.03);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 20px rgba(19, 127, 236, 0.5);
+        }
+
+        /* Background Animation Blobs */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col overflow-x-hidden relative">
+<!-- Ambient Background Effects -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+<div class="blob bg-primary w-[500px] h-[500px] top-[-100px] left-[-100px]"></div>
+<div class="blob bg-purple-600 w-[400px] h-[400px] bottom-[10%] right-[-50px] animation-delay-2000"></div>
+<div class="blob bg-blue-400 w-[300px] h-[300px] top-[40%] left-[30%] opacity-20"></div>
+</div>
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glass-border">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3 text-white">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white" style="font-size: 24px;">auto_awesome</span>
+</div>
+<h2 class="text-2xl font-bold tracking-tight">Aura</h2>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-300 hover:text-white text-sm font-medium transition-colors hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" href="#">Features</a>
+<a class="text-slate-300 hover:text-white text-sm font-medium transition-colors hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" href="#">Pricing</a>
+<a class="text-slate-300 hover:text-white text-sm font-medium transition-colors hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" href="#">Showcase</a>
+</div>
+<div class="flex gap-4">
+<button class="hidden sm:flex h-10 px-6 items-center justify-center rounded-lg neo-flat text-slate-300 text-sm font-bold hover:text-white transition-all active:scale-95">
+                    Log In
+                </button>
+<button class="h-10 px-6 flex items-center justify-center rounded-lg bg-primary hover:bg-blue-500 text-white text-sm font-bold shadow-[0_0_15px_rgba(19,127,236,0.5)] transition-all hover:shadow-[0_0_25px_rgba(19,127,236,0.7)] active:scale-95">
+                    Get Started
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<main class="flex-grow pt-32 pb-20 relative z-10 px-4 sm:px-6">
+<div class="max-w-7xl mx-auto flex flex-col gap-12">
+<!-- Hero Header -->
+<div class="flex flex-col gap-6 text-center items-center max-w-4xl mx-auto mb-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2 backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    v2.0 Now Available
+                </div>
+<h1 class="text-5xl md:text-7xl font-black tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">
+                    Design at the <br/> speed of <span class="text-primary text-glow">thought</span>
+</h1>
+<p class="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed">
+                    Harness the power of Aura's intelligent neural engine. Transform abstract ideas into production-ready assets with a single prompt.
+                </p>
+</div>
+<!-- Bento Grid Feature Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[minmax(180px,auto)] gap-6">
+<!-- Card 1: Main Generative Canvas (Large span) -->
+<div class="glass-card rounded-2xl p-6 md:col-span-2 lg:col-span-2 md:row-span-2 flex flex-col relative group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex items-center justify-between mb-4 z-10">
+<div class="neo-inset w-12 h-12 rounded-xl flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">brush</span>
+</div>
+<span class="px-2 py-1 bg-white/5 border border-white/10 rounded text-[10px] uppercase font-bold tracking-widest text-slate-400">Flagship</span>
+</div>
+<div class="z-10 mb-6">
+<h3 class="text-2xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Generative Canvas</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Experience real-time rendering. Sketch simple shapes and watch them transform into photorealistic masterpieces instantly.</p>
+</div>
+<div class="flex-grow rounded-xl bg-black/40 border border-white/5 relative overflow-hidden group-hover:border-primary/30 transition-colors">
+<!-- Placeholder for Generative UI -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Abstract colorful generative digital art showing swirling neon colors" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmzdIzW0jLv5tGKszwR3mjXxNytQfnzYVDQznlkSCGddwgRRe032B3qu8nrF7tLZ0imvNsQVu72xuQziF46JRaE3GaZ0zlHtNGbyFY1lX1HIoBlIxlPMkqfOgOj1FeWSEu95-KMqSBub4wkXQCuq3W65ma3Z7xYmw0MBU2TCof31zKympTAFrJruhKI0ZRboqSWqKvX4h9-Ei5KMFh3Gm9BSSxJZLq5g4vkN3sk-vXZrciTh0vFVgN8DG-jVqRaLNl4e8T8q3XCQ');">
+</div>
+<div class="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md rounded-lg p-3 border border-white/10 flex items-center gap-3">
+<span class="material-symbols-outlined text-white animate-spin">sync</span>
+<div class="h-1.5 flex-grow bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3 rounded-full"></div>
+</div>
+<span class="text-xs text-white font-mono">Generating...</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Smart Upscaling (Vertical) -->
+<div class="glass-card rounded-2xl p-6 md:col-span-1 lg:col-span-1 md:row-span-2 flex flex-col relative group overflow-hidden">
+<div class="flex items-center justify-between mb-4 z-10">
+<div class="neo-inset w-12 h-12 rounded-xl flex items-center justify-center text-green-400">
+<span class="material-symbols-outlined">hd</span>
+</div>
+</div>
+<div class="z-10 mb-auto">
+<h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Smart Upscaling</h3>
+<p class="text-slate-400 text-sm">4x resolution without losing detail using GANs.</p>
+</div>
+<div class="h-64 mt-4 relative rounded-xl overflow-hidden border border-white/5 group-hover:border-green-400/30 transition-colors">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Cyberpunk city street at night with neon lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCvN7RgDDNpO3mvVkclGcwQSIlUzgfTOQA-1OEF9_QLsEy33xMykI7KiAa0oI2RFjOkKXddl30KBnrjZwoJRyCYgzbm3hJeJSQMktnc2o9U_enz1GI4TTl2IGekvO_wxoxBP3YRTkUwwBqcJIz5ozBnwCJZ8VrfBPpxzeCJULNdLtlvESe_4-gp4H78qGPiXCrWRmUd0GB-JGHLfwLQOzzcV3UeHhmEnAK5asBXaU9MOkkREqh1PUHKwgVNtGhUKEZBBmzKpbWyqw')"></div>
+<div class="absolute inset-y-0 left-1/2 w-0.5 bg-white shadow-[0_0_10px_white] z-20 flex items-center justify-center">
+<div class="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center shadow-lg cursor-ew-resize">
+<span class="material-symbols-outlined text-[14px]">code</span>
+</div>
+</div>
+<div class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 rounded text-[10px] text-white">SD</div>
+<div class="absolute top-2 right-2 px-2 py-0.5 bg-green-500/80 rounded text-[10px] text-white font-bold">4K AI</div>
+</div>
+</div>
+<!-- Card 3: Team Sync (Standard) -->
+<div class="glass-card rounded-2xl p-6 md:col-span-1 lg:col-span-1 flex flex-col justify-between group">
+<div>
+<div class="neo-inset w-12 h-12 rounded-xl flex items-center justify-center text-purple-400 mb-4">
+<span class="material-symbols-outlined">group</span>
+</div>
+<h3 class="text-lg font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">Live Collab</h3>
+<p class="text-slate-400 text-sm">Multiplayer cursor support.</p>
+</div>
+<div class="flex -space-x-3 mt-4">
+<img alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-[#1a232e]" data-alt="Avatar of a user named Alex" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDHNbjZmNxPt6vSUT-0w_dXgyfTEgDxg4_YtAGh59aMouDs0zFylYbr59iz8uH93A9ArgWXKYI6mGPM3lhLX0D-gE6hH26S8a5HBTRj95A11nT__LcEhofWfJ5xj8131C-ITX2L_L65B3Bt7CGZSbDviLPxoYQk_gEfEjGjb3-GNb0MjLnI3pleBT3PyC7_v9BHCteAXQ5T14rLLc_p_QHQit_yRUri9Rccr5ZwpMWOLOYWtx1eX2a4Qi6du4Aetgx519YYzM60g"/>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-[#1a232e]" data-alt="Avatar of a user named Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgbtVtW_cp5nmjebyyxEmx_OkFQ4A0pfPFvQ_JOrFqTAEYr4RiOnGZ0wp7MHv_ns01fxH2lhJSHmF9RMx_aumMQuITACFBBhOXgHv7qF-BsQVBJoswHyK5Admc8wEj7HnJwkUYqfImhxK8Fut88Yg5AevSh34hE0_bbfmRs2tACjIzF42tGZYO7ef86S6JXDe4vTE6MrWl2Bq0AeVmd8iNoIdsdABg1Ov-q83qWNTGJKggCEaq05BvlCkvnOkzbrhR2vnsYIiUWA"/>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-[#1a232e]" data-alt="Avatar of a user named Mike" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjc2rQF5-Tf5t05nV_Rm6NVUQbKuqdzBLDzVZu8QXOKHRoSda-Wd2QKM8UYEZeTCYB5tfSSwSU0zsy26zmYpkCZr5uQPaQTW4ys5e59eRLqJE-Cb9WOTZOcUHojz-RLtpD7Diz81CD2DKOCs_1uPrMGPn2TTqq1x5bbIPMPH1gKZe45vz1JgwFhxLTfv6YJmWSGSIRoOAPV-Wrp0OTulHohxSwpHD4L6UNRo2eLUlnLE4Ywuc0vuXuH1_cxyJc-fWBiifGAooTIw"/>
+<div class="w-8 h-8 rounded-full border-2 border-[#1a232e] bg-slate-700 flex items-center justify-center text-[10px] text-white">+5</div>
+</div>
+</div>
+<!-- Card 4: Prompt Assistant (Standard) -->
+<div class="glass-card rounded-2xl p-6 md:col-span-1 lg:col-span-1 flex flex-col justify-between group">
+<div>
+<div class="neo-inset w-12 h-12 rounded-xl flex items-center justify-center text-orange-400 mb-4">
+<span class="material-symbols-outlined">magic_button</span>
+</div>
+<h3 class="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">Prompt Magic</h3>
+<p class="text-slate-400 text-sm">Auto-enhance your text prompts.</p>
+</div>
+<div class="mt-3 p-2 bg-black/40 rounded border border-white/5 text-xs text-slate-300 font-mono">
+<span class="text-slate-500">&gt;</span> "A futuristic city..."
+                        <br/>
+<span class="text-green-400">✨ Enhancing...</span>
+</div>
+</div>
+<!-- Card 5: Export (Wide) -->
+<div class="glass-card rounded-2xl p-6 md:col-span-2 lg:col-span-2 flex items-center justify-between gap-6 group relative overflow-hidden">
+<div class="z-10 max-w-[60%]">
+<div class="neo-inset w-12 h-12 rounded-xl flex items-center justify-center text-pink-500 mb-4">
+<span class="material-symbols-outlined">output</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-500 transition-colors">Seamless Export</h3>
+<p class="text-slate-400 text-sm">One-click export to Figma, React code, or production-ready SVG/PNG assets. Your workflow, uninterrupted.</p>
+</div>
+<div class="flex-shrink-0 relative z-10">
+<div class="flex gap-2">
+<div class="w-12 h-12 rounded-lg bg-[#2c2c2c] flex items-center justify-center border border-white/10 shadow-lg transform group-hover:rotate-6 transition-transform">
+<!-- Simple representation of Figma Icon colors -->
+<div class="grid grid-cols-2 gap-[2px] w-6 h-6">
+<div class="bg-[#F24E1E] rounded-full"></div>
+<div class="bg-[#FF7262] rounded-full"></div>
+<div class="bg-[#A259FF] rounded-full"></div>
+<div class="bg-[#1ABCFE] rounded-full"></div>
+</div>
+</div>
+<div class="w-12 h-12 rounded-lg bg-[#2c2c2c] flex items-center justify-center border border-white/10 shadow-lg transform group-hover:-rotate-6 transition-transform delay-75">
+<span class="material-symbols-outlined text-blue-400">code</span>
+</div>
+</div>
+</div>
+<!-- Decorative background glow -->
+<div class="absolute -right-10 -bottom-20 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl group-hover:bg-pink-500/30 transition-colors"></div>
+</div>
+<!-- Card 6: Analytics/Stats (Standard) -->
+<div class="glass-card rounded-2xl p-6 md:col-span-1 lg:col-span-1 flex flex-col group">
+<div class="flex items-center justify-between">
+<div class="neo-inset w-12 h-12 rounded-xl flex items-center justify-center text-teal-400 mb-4">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+<span class="text-xs text-green-400 flex items-center gap-1 bg-green-400/10 px-2 py-1 rounded-full border border-green-400/20">
+<span class="material-symbols-outlined text-[12px]">arrow_upward</span> 24%
+                        </span>
+</div>
+<h3 class="text-lg font-bold text-white mb-1 group-hover:text-teal-400 transition-colors">Usage Analytics</h3>
+<div class="mt-auto h-12 flex items-end gap-1">
+<div class="w-1/5 bg-slate-700 h-[40%] rounded-sm"></div>
+<div class="w-1/5 bg-slate-700 h-[60%] rounded-sm"></div>
+<div class="w-1/5 bg-slate-700 h-[30%] rounded-sm"></div>
+<div class="w-1/5 bg-primary/50 h-[80%] rounded-sm group-hover:bg-primary transition-colors"></div>
+<div class="w-1/5 bg-slate-700 h-[50%] rounded-sm"></div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<div class="glass-panel p-10 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-8 mt-8 border border-white/10 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-full h-full bg-gradient-to-r from-transparent to-primary/10 pointer-events-none"></div>
+<div class="z-10 text-center md:text-left">
+<h2 class="text-3xl font-bold text-white mb-2">Ready to unleash your creativity?</h2>
+<p class="text-slate-400">Join 10,000+ designers shaping the future with Aura.</p>
+</div>
+<div class="z-10 flex gap-4">
+<button class="h-12 px-8 flex items-center justify-center rounded-lg bg-primary text-white text-base font-bold shadow-[0_0_20px_rgba(19,127,236,0.4)] hover:bg-blue-500 hover:shadow-[0_0_30px_rgba(19,127,236,0.6)] hover:-translate-y-1 transition-all">
+                        Get Started Free
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="relative z-10 glass-panel border-t border-glass-border">
+<div class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">auto_awesome</span>
+</div>
+<span class="text-white font-bold text-xl">Aura</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-8">
+<a class="text-slate-400 hover:text-white transition-colors text-sm" href="#">Privacy Policy</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm" href="#">Terms of Service</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm" href="#">Twitter</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm" href="#">Discord</a>
+</div>
+<p class="text-slate-500 text-sm">© 2024 Aura Design Studio.</p>
+</div>
+</footer>
+</body></html>

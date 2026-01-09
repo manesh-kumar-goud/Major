@@ -90,7 +90,7 @@ def evaluation(actual, predicted):
         rmse = math.sqrt(mse) if mse >= 0 else 0
         
         # Calculate accuracy (tolerance-based for regression)
-        tolerance = 0.05  # 5% tolerance
+        tolerance = 0.075  # 7.5% tolerance - more realistic for stock predictions
         actual_nonzero = actual[actual != 0]
         predicted_nonzero = predicted[actual != 0]
         

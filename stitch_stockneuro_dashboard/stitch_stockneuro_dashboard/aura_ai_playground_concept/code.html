@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura - AI Design Studio Playground</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#0f172a", // Slightly deeper dark blue/slate
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"],
+              "body": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem", 
+              "lg": "0.5rem", 
+              "xl": "0.75rem", 
+              "2xl": "1rem",
+              "3xl": "1.5rem",
+              "full": "9999px"
+            },
+            boxShadow: {
+               'glow': '0 0 20px rgba(19, 127, 236, 0.5)',
+               'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+               'neu-dark': '5px 5px 10px #0b111f, -5px -5px 10px #1f2f45',
+               'neu-pressed': 'inset 5px 5px 10px #0b111f, inset -5px -5px 10px #1f2f45',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        
+        /* Grid Pattern */
+        .bg-grid-pattern {
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-heavy {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Animated Gradient Background */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white h-screen overflow-hidden flex selection:bg-primary selection:text-white">
+<!-- Ambient Background Effects -->
+<div class="ambient-glow bg-primary top-[-200px] left-[-200px]"></div>
+<div class="ambient-glow bg-purple-600 bottom-[-200px] right-[-100px]"></div>
+<div class="ambient-glow bg-cyan-500 top-[20%] right-[30%] w-[300px] h-[300px] opacity-20"></div>
+<!-- Sidebar (Controls) -->
+<aside class="glass-panel-heavy relative z-20 w-[380px] h-full flex flex-col justify-between shrink-0 overflow-y-auto">
+<!-- Header -->
+<div class="p-6 border-b border-white/5">
+<div class="flex items-center gap-3 text-white mb-6">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center shadow-glow">
+<span class="material-symbols-outlined text-white text-lg">auto_awesome</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">Aura Studio</h1>
+</div>
+<nav class="flex gap-1 p-1 bg-black/20 rounded-lg">
+<button class="flex-1 py-1.5 px-3 rounded text-xs font-medium bg-primary text-white shadow-sm transition-all">Create</button>
+<button class="flex-1 py-1.5 px-3 rounded text-xs font-medium text-slate-400 hover:text-white transition-all">History</button>
+<button class="flex-1 py-1.5 px-3 rounded text-xs font-medium text-slate-400 hover:text-white transition-all">Saved</button>
+</nav>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 p-6 flex flex-col gap-8">
+<!-- Prompt Input -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="text-sm font-semibold text-slate-200 uppercase tracking-wider">Prompt</label>
+<span class="text-xs text-primary cursor-pointer hover:underline">Enhance with AI</span>
+</div>
+<div class="relative group">
+<textarea class="w-full h-40 bg-black/20 text-sm text-white placeholder:text-slate-500 rounded-xl border border-white/10 p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all shadow-inner" placeholder="Describe your UI component... e.g., A translucent credit card payment form with neon gradients and frosted glass effect.">A sleek credit card payment form featuring a frosted glass background, neon accent borders, and input fields for card details. Make it look futuristic.</textarea>
+<div class="absolute bottom-3 right-3 text-slate-500 text-xs">128/500</div>
+</div>
+</div>
+<!-- Styles -->
+<div class="flex flex-col gap-3">
+<label class="text-sm font-semibold text-slate-200 uppercase tracking-wider">Aesthetic Style</label>
+<div class="grid grid-cols-2 gap-3">
+<!-- Active Pill -->
+<button class="relative group overflow-hidden rounded-lg p-[1px] focus:outline-none ring-offset-2 ring-offset-background-dark focus:ring-2 focus:ring-primary">
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-cyan-400 opacity-100 transition-opacity"></div>
+<div class="relative h-full bg-slate-900 rounded-[7px] px-4 py-3 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">blur_on</span>
+<span class="text-sm font-medium text-white">Glass</span>
+</div>
+</button>
+<!-- Inactive Pills (Neomorphic) -->
+<button class="rounded-lg px-4 py-3 flex items-center gap-3 bg-[#131b2c] border border-white/5 shadow-neu-dark hover:bg-[#1a253a] transition-all group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-white transition-colors text-xl">palette</span>
+<span class="text-sm font-medium text-slate-400 group-hover:text-white transition-colors">Minimal</span>
+</button>
+<button class="rounded-lg px-4 py-3 flex items-center gap-3 bg-[#131b2c] border border-white/5 shadow-neu-dark hover:bg-[#1a253a] transition-all group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-white transition-colors text-xl">terminal</span>
+<span class="text-sm font-medium text-slate-400 group-hover:text-white transition-colors">Cyber</span>
+</button>
+<button class="rounded-lg px-4 py-3 flex items-center gap-3 bg-[#131b2c] border border-white/5 shadow-neu-dark hover:bg-[#1a253a] transition-all group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-white transition-colors text-xl">grid_view</span>
+<span class="text-sm font-medium text-slate-400 group-hover:text-white transition-colors">Metro</span>
+</button>
+</div>
+</div>
+<!-- Configuration -->
+<div class="flex flex-col gap-3">
+<label class="text-sm font-semibold text-slate-200 uppercase tracking-wider">Output Format</label>
+<div class="relative">
+<select class="w-full bg-[#131b2c] text-white text-sm rounded-lg border-none shadow-neu-dark py-3 pl-4 pr-10 focus:ring-1 focus:ring-primary appearance-none cursor-pointer">
+<option>React + Tailwind</option>
+<option>HTML + CSS</option>
+<option>Vue + Tailwind</option>
+</select>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / CTA -->
+<div class="p-6 border-t border-white/5 bg-black/20 backdrop-blur-md">
+<button class="w-full group relative flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-600 hover:to-blue-500 text-white font-bold py-3.5 rounded-xl shadow-glow transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+<span class="material-symbols-outlined animate-pulse">auto_awesome</span>
+<span>Generate Component</span>
+<div class="absolute inset-0 rounded-xl ring-1 ring-white/20 group-hover:ring-white/40"></div>
+</button>
+<div class="flex items-center justify-center gap-2 mt-3 text-xs text-slate-500">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>2 credits will be used</span>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="relative z-10 flex-1 flex flex-col h-full bg-grid-pattern">
+<!-- Canvas Toolbar -->
+<header class="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-sm text-slate-400">
+<span class="material-symbols-outlined text-lg">home</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span>Playground</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-white font-medium">Untitled Project</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex bg-[#131b2c] rounded-lg p-1 border border-white/5 shadow-neu-pressed">
+<button class="p-1.5 rounded bg-white/10 text-white shadow-sm"><span class="material-symbols-outlined text-sm">desktop_windows</span></button>
+<button class="p-1.5 rounded text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">tablet_mac</span></button>
+<button class="p-1.5 rounded text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">smartphone</span></button>
+</div>
+<div class="w-px h-6 bg-white/10 mx-2"></div>
+<button class="flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors">
+<span class="material-symbols-outlined">code</span>
+<span>View Code</span>
+</button>
+<button class="flex items-center gap-2 text-sm font-medium text-primary hover:text-blue-300 transition-colors">
+<span class="material-symbols-outlined">share</span>
+<span>Share</span>
+</button>
+</div>
+</header>
+<!-- Canvas Area -->
+<div class="flex-1 overflow-hidden relative flex items-center justify-center p-10">
+<!-- Result Container (Simulated AI Generation) -->
+<div class="relative group/canvas max-w-2xl w-full perspective-1000">
+<!-- Floating Action Bar (Attached to component) -->
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-slate-900/90 backdrop-blur border border-white/10 rounded-full px-4 py-2 opacity-0 group-hover/canvas:opacity-100 transition-opacity duration-300 shadow-2xl translate-y-2 group-hover/canvas:translate-y-0">
+<span class="text-xs font-mono text-green-400 mr-2 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Generated in 1.4s
+                    </span>
+<div class="w-px h-4 bg-white/10"></div>
+<button class="p-1.5 hover:bg-white/10 rounded-full text-slate-300 hover:text-white" title="Copy Code">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+<button class="p-1.5 hover:bg-white/10 rounded-full text-slate-300 hover:text-white" title="Regenerate">
+<span class="material-symbols-outlined text-sm">refresh</span>
+</button>
+<button class="p-1.5 hover:bg-white/10 rounded-full text-slate-300 hover:text-white" title="Save">
+<span class="material-symbols-outlined text-sm">bookmark</span>
+</button>
+</div>
+<!-- The "Generated" Component: Credit Card Form -->
+<div class="glass-panel p-8 rounded-3xl shadow-glass relative overflow-hidden transition-all duration-500 hover:shadow-glow/20 border-t border-white/20">
+<!-- Component Background Decorations -->
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-8">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="text-2xl font-bold text-white tracking-tight">Payment Details</h2>
+<p class="text-slate-400 text-sm mt-1">Complete your purchase securely</p>
+</div>
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">lock</span>
+</div>
+</div>
+<!-- Card Visual -->
+<div class="w-full aspect-[1.586/1] rounded-2xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-white/10 p-6 relative overflow-hidden shadow-2xl group-hover/canvas:scale-[1.02] transition-transform duration-500">
+<!-- Card Shine -->
+<div class="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-50"></div>
+<div class="flex flex-col justify-between h-full relative z-10">
+<div class="flex justify-between items-start">
+<div class="w-12 h-8 bg-white/10 rounded-md backdrop-blur-sm border border-white/10"></div> <!-- Chip -->
+<span class="font-mono text-white/50 text-sm">Debit</span>
+</div>
+<div class="space-y-4">
+<div class="font-mono text-2xl text-white tracking-widest drop-shadow-md">
+                                         4242 4242 4242 4242
+                                     </div>
+<div class="flex justify-between items-end">
+<div>
+<div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Card Holder</div>
+<div class="text-sm text-white font-medium uppercase tracking-wide">Alex Morgan</div>
+</div>
+<div>
+<div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Expires</div>
+<div class="text-sm text-white font-medium">12/25</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2">
+<label class="text-xs font-semibold text-slate-300 uppercase tracking-wide mb-2 block">Cardholder Name</label>
+<div class="relative">
+<input class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600" type="text" value="Alex Morgan"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-slate-500 text-lg">person</span>
+</div>
+</div>
+<div>
+<label class="text-xs font-semibold text-slate-300 uppercase tracking-wide mb-2 block">Expiry Date</label>
+<div class="relative">
+<input class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600" type="text" value="12/25"/>
+</div>
+</div>
+<div>
+<label class="text-xs font-semibold text-slate-300 uppercase tracking-wide mb-2 block">CVC</label>
+<div class="relative">
+<input class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600" type="text" value="***"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-slate-500 text-lg">help</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-glow transition-all transform active:scale-[0.99] mt-2 flex items-center justify-center gap-2">
+<span>Pay $1,299.00</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State / Loading Overlay (Hidden initially for the "Result" view as requested, but good to have structure if needed later) -->
+<!-- 
+            <div class="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 hidden">
+                <div class="flex flex-col items-center gap-4">
+                    <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    <p class="text-white font-medium animate-pulse">Designing your component...</p>
+                </div>
+            </div> 
+            -->
+</div>
+<!-- Canvas Footer Status -->
+<footer class="h-10 border-t border-white/5 bg-background-dark/80 backdrop-blur-sm flex items-center justify-between px-6 text-xs text-slate-500">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+                    Ready
+                </span>
+<span>v2.4.0 (Beta)</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="cursor-pointer hover:text-white">Keyboard Shortcuts</span>
+<span class="cursor-pointer hover:text-white">Help &amp; Docs</span>
+</div>
+</footer>
+</main>
+</body></html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraTrade - Market Pulse</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0f1115", 
+                        "glass-bg": "rgba(255, 255, 255, 0.03)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "success": "#00E676",
+                        "danger": "#FF1744",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0f1115;
+            color: white;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ambient background glow */
+        .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(19, 127, 236, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .ambient-glow-2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 230, 118, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: -100px;
+            right: 10%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Fade in up animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation-duration: 0.8s;
+            animation-fill-mode: both;
+            animation-name: fadeInUp;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f1115; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233648; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #137fec; 
+        }
+    </style>
+</head>
+<body class="relative min-h-screen w-full flex flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Background Effects -->
+<div class="ambient-glow"></div>
+<div class="ambient-glow-2"></div>
+<!-- Navigation -->
+<header class="relative z-50 flex items-center justify-between whitespace-nowrap border-b border-white/5 px-6 lg:px-10 py-4 bg-background-dark/50 backdrop-blur-md sticky top-0">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined !text-[32px]">ssid_chart</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">AuraTrade</h2>
+</div>
+<div class="hidden lg:flex flex-1 justify-end gap-8 items-center">
+<nav class="flex items-center gap-8">
+<a class="text-white/70 hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Dashboard</a>
+<a class="text-white/70 hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Markets</a>
+<a class="text-white/70 hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Portfolio</a>
+<a class="text-white/70 hover:text-white text-sm font-medium leading-normal transition-colors" href="#">News</a>
+<a class="text-white/70 hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Settings</a>
+</nav>
+<div class="h-6 w-px bg-white/10 mx-2"></div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-bold leading-normal tracking-[0.015em] transition-all">
+<span class="truncate">Sign In</span>
+</button>
+</div>
+<button class="lg:hidden text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="relative z-10 flex flex-1 flex-col items-center justify-center py-10 px-4 sm:px-10">
+<div class="w-full max-w-[1100px] flex flex-col items-center gap-12">
+<!-- Headline -->
+<div class="text-center animate-fade-in-up">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+</span>
+<span class="text-xs font-semibold uppercase tracking-wider text-white/70">Market Pulse • Real-time</span>
+</div>
+<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4">
+                    Trade with <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#00E676]">precision.</span>
+</h1>
+<p class="text-lg text-white/50 max-w-2xl mx-auto">
+                    Institutional-grade data visualization wrapped in a next-gen interface. Track, analyze, and execute trades at the speed of light.
+                </p>
+</div>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+<!-- Card 1: S&P 500 -->
+<div class="glass-card rounded-xl p-6 flex flex-col gap-4 animate-fade-in-up delay-100 group hover:border-white/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<h3 class="text-white/60 text-sm font-semibold tracking-wider uppercase">S&amp;P 500</h3>
+<p class="text-2xl font-bold text-white mt-1">4,120.50</p>
+</div>
+<div class="flex items-center gap-1 bg-success/10 px-2 py-1 rounded text-success text-xs font-bold">
+<span class="material-symbols-outlined !text-sm">trending_up</span>
+<span>+1.2%</span>
+</div>
+</div>
+<!-- Chart Graphic (SVG) -->
+<div class="h-[140px] w-full mt-2 relative">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 100">
+<defs>
+<lineargradient id="gradientSuccess" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#00E676" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#00E676" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,80 C30,75 50,90 80,60 C110,30 140,70 170,50 C200,30 230,40 260,20 C280,5 290,15 300,10 V100 H0 Z" fill="url(#gradientSuccess)"></path>
+<path d="M0,80 C30,75 50,90 80,60 C110,30 140,70 170,50 C200,30 230,40 260,20 C280,5 290,15 300,10" fill="none" stroke="#00E676" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+<!-- Hover Interaction Line (Simulated) -->
+<div class="absolute top-0 bottom-0 left-2/3 w-px bg-white/20 hidden group-hover:block pointer-events-none"></div>
+<div class="absolute top-[20%] left-2/3 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-success rounded-full shadow-[0_0_8px_rgba(0,230,118,0.8)] hidden group-hover:block pointer-events-none"></div>
+</div>
+<div class="flex justify-between text-xs text-white/30 font-medium pt-2 border-t border-white/5">
+<span>Vol: 2.4B</span>
+<span>H: 4,142.10 L: 4,098.20</span>
+</div>
+</div>
+<!-- Card 2: NASDAQ -->
+<div class="glass-card rounded-xl p-6 flex flex-col gap-4 animate-fade-in-up delay-200 group hover:border-white/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<h3 class="text-white/60 text-sm font-semibold tracking-wider uppercase">NASDAQ</h3>
+<p class="text-2xl font-bold text-white mt-1">12,340.10</p>
+</div>
+<div class="flex items-center gap-1 bg-danger/10 px-2 py-1 rounded text-danger text-xs font-bold">
+<span class="material-symbols-outlined !text-sm">trending_down</span>
+<span>-0.8%</span>
+</div>
+</div>
+<!-- Chart Graphic (SVG) -->
+<div class="h-[140px] w-full mt-2 relative">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 100">
+<defs>
+<lineargradient id="gradientDanger" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#FF1744" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#FF1744" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,30 C40,25 60,40 90,60 C120,80 150,50 180,70 C210,90 240,80 270,90 C285,95 295,95 300,98 V100 H0 Z" fill="url(#gradientDanger)"></path>
+<path d="M0,30 C40,25 60,40 90,60 C120,80 150,50 180,70 C210,90 240,80 270,90 C285,95 295,95 300,98" fill="none" stroke="#FF1744" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex justify-between text-xs text-white/30 font-medium pt-2 border-t border-white/5">
+<span>Vol: 4.1B</span>
+<span>H: 12,450.00 L: 12,300.50</span>
+</div>
+</div>
+<!-- Card 3: DOW JONES -->
+<div class="glass-card rounded-xl p-6 flex flex-col gap-4 animate-fade-in-up delay-300 group hover:border-white/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<h3 class="text-white/60 text-sm font-semibold tracking-wider uppercase">DOW JONES</h3>
+<p class="text-2xl font-bold text-white mt-1">33,500.00</p>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded text-primary text-xs font-bold">
+<span class="material-symbols-outlined !text-sm">trending_up</span>
+<span>+0.4%</span>
+</div>
+</div>
+<!-- Chart Graphic (SVG) -->
+<div class="h-[140px] w-full mt-2 relative">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 100">
+<defs>
+<lineargradient id="gradientPrimary" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#137fec" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#137fec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,60 C30,60 50,55 80,50 C110,45 130,55 160,40 C190,25 220,35 250,25 C270,18 285,20 300,15 V100 H0 Z" fill="url(#gradientPrimary)"></path>
+<path d="M0,60 C30,60 50,55 80,50 C110,45 130,55 160,40 C190,25 220,35 250,25 C270,18 285,20 300,15" fill="none" stroke="#137fec" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex justify-between text-xs text-white/30 font-medium pt-2 border-t border-white/5">
+<span>Vol: 340M</span>
+<span>H: 33,610.15 L: 33,450.80</span>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<div class="flex justify-center animate-fade-in-up delay-300">
+<button class="relative group cursor-pointer overflow-hidden rounded-lg h-12 px-8 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] shadow-[0_0_20px_rgba(19,127,236,0.3)] hover:shadow-[0_0_30px_rgba(19,127,236,0.5)] transition-all duration-300">
+<span class="relative z-10 flex items-center gap-2">
+                        Open Terminal
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+</span>
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+</button>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,13 +1,65 @@
-Flask==3.0.0
-Flask-CORS==4.0.0
+# Core Framework
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# Deep Learning
+tensorflow==2.18.0
+keras==3.3.3
 numpy==2.1.3
-pandas==2.3.0
-scikit-learn==1.7.0
-tensorflow==2.19.0
-requests==2.32.4
-python-dateutil>=2.8.2
-Werkzeug>=3.0.0
+pandas==2.2.3
+scikit-learn==1.5.2
+
+# HTTP & API
+httpx==0.27.2
+aiohttp==3.11.0
+requests==2.32.3
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.12
+
+# Environment & Config
 python-dotenv==1.0.0
-matplotlib>=3.8.0
-joblib>=1.4.0
-gunicorn>=21.2.0
+
+# Data Processing
+python-dateutil==2.9.0.post0
+
+# Caching
+redis==5.2.0
+cachetools==5.4.0
+
+# Testing
+pytest==8.3.3
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+httpx==0.27.2
+
+# Utilities
+joblib==1.4.2
+matplotlib==3.9.2
+
+# MLOps & Model Management
+mlflow==2.15.1
+optuna==3.6.1
+
+# Advanced Time Series Models
+torch==2.5.1
+pytorch-forecasting==1.0.0
+neuralforecast>=1.7.0  # PatchTST, iTransformer support
+
+# Next-Gen Foundation Models (for future phases)
+transformers>=4.40.0  # Chronos, MOIRAI (Hugging Face)
+# mamba-ssm>=1.2.0  # Mamba architecture (optional, if available)
+
+# Additional Metrics & Evaluation
+scipy==1.14.1
+
+# Supabase
+supabase==2.10.0
+
+# Production Server
+gunicorn==23.0.0

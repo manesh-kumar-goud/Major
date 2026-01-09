@@ -82,9 +82,10 @@ def validate_config():
     
     # Check if RAPIDAPI_KEY is available
     if not os.getenv('RAPIDAPI_KEY') or os.getenv('RAPIDAPI_KEY') == 'your-rapidapi-key-here':
-        print("⚠️  Warning: RAPIDAPI_KEY not configured - using mock data")
+        print("⚠️  Warning: RAPIDAPI_KEY not configured - REAL DATA REQUIRED")
+        print("   Please set RAPIDAPI_KEY in your .env file to use real stock data")
     else:
-        print("✅ RapidAPI key configured")
+        print("✅ RapidAPI key configured - Using REAL DATA only")
     
     if missing_vars:
         raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")

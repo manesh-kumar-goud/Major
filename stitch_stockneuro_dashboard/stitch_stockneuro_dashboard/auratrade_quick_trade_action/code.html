@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraTrade - Quick Trade Action</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                        "glass-surface": "rgba(17, 26, 34, 0.8)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(35, 54, 72, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 20px rgba(19, 127, 236, 0.5);
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #137fec;
+            cursor: pointer;
+            margin-top: -10px; 
+            box-shadow: 0 0 10px rgba(19, 127, 236, 0.8);
+            border: 2px solid white;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #324d67;
+            border-radius: 2px;
+        }
+        
+        /* Firefox */
+        input[type=range]::-moz-range-thumb {
+            height: 24px;
+            width: 24px;
+            border: 2px solid white;
+            border-radius: 50%;
+            background: #137fec;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(19, 127, 236, 0.8);
+        }
+
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #324d67;
+            border-radius: 2px;
+        }
+
+        .neon-shadow {
+            box-shadow: 0 0 15px rgba(19, 127, 236, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-hidden h-screen w-full relative">
+<!-- Background Elements (Blurred/Dimmed context) -->
+<div class="flex h-full w-full flex-col absolute inset-0 z-0 opacity-40 pointer-events-none blur-sm">
+<!-- Top Nav (Static Context) -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#233648] px-10 py-3 bg-[#111a22]">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined !text-[32px]">token</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">AuraTrade</h2>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB8rqmWgMlUMVbCsLbKhHfPOqPVew1zOXHtgmdS9MEsOGwOEn264aLTvCaDYEa88PnaUNTIGQRgfTEB6bTIK2mooPKPSHcQZEyKiRSVWUbOYTKPi4YeTEyPSHi8dD7GAGn5xMoLpQlnxoqWENtDfUTqpK0txy3AcEKI8NM7fFsmrvt1YXl0RIyc3Gxt8iABD67AhdeAXC-B6R3SkdyzA3ErMXNzj_fzbcyYeNBNE53lrEOZ5jK451wPzW6ARJLr6QosnevtE_imIg");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Side Nav (Static Context) -->
+<div class="w-64 border-r border-[#233648] bg-[#111a22] p-4 flex flex-col gap-4">
+<div class="flex items-center gap-3 px-3 py-2 rounded-xl bg-[#233648]/50">
+<span class="material-symbols-outlined text-white">dashboard</span>
+<p class="text-white text-sm font-medium">Dashboard</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2">
+<span class="material-symbols-outlined text-[#92adc9]">account_balance_wallet</span>
+<p class="text-[#92adc9] text-sm font-medium">Portfolio</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2">
+<span class="material-symbols-outlined text-[#92adc9]">candlestick_chart</span>
+<p class="text-[#92adc9] text-sm font-medium">Markets</p>
+</div>
+</div>
+<!-- Main Content Area (Static Context) -->
+<div class="flex-1 p-8 flex flex-col gap-8">
+<!-- Stats Row -->
+<div class="flex gap-4">
+<div class="flex-1 rounded-xl p-6 border border-[#324d67] bg-[#16212b]">
+<p class="text-[#92adc9] text-sm">AAPL</p>
+<p class="text-2xl font-bold mt-1">$145.32</p>
+<p class="text-[#0bda5b] text-sm mt-1">+1.2%</p>
+</div>
+<div class="flex-1 rounded-xl p-6 border border-[#324d67] bg-[#16212b]">
+<p class="text-[#92adc9] text-sm">TSLA</p>
+<p class="text-2xl font-bold mt-1">$789.20</p>
+</div>
+<div class="flex-1 rounded-xl p-6 border border-[#324d67] bg-[#16212b]">
+<p class="text-[#92adc9] text-sm">BTC</p>
+<p class="text-2xl font-bold mt-1">$43,210</p>
+</div>
+</div>
+<!-- Big Chart Placeholder -->
+<div class="flex-1 rounded-xl border border-[#324d67] bg-[#16212b] p-6 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-[#137fec]/10 to-transparent"></div>
+<svg class="w-full h-full text-[#137fec] opacity-30" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0 80 Q 20 60, 40 70 T 70 40 T 100 20 V 100 H 0 Z" fill="currentColor"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Overlay / Modal Layer -->
+<div class="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px]">
+<!-- Glassmorphism Modal -->
+<div class="glass-panel w-full max-w-[480px] rounded-2xl p-0 overflow-hidden shadow-2xl animate-fade-in-up transform transition-all relative">
+<!-- Modal Header -->
+<div class="px-6 py-5 border-b border-white/10 flex justify-between items-center bg-white/5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-white flex items-center justify-center overflow-hidden p-1">
+<img alt="Apple Inc Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS1KLy0Dkwx9HHSusngdEPdEhhwHSGbBEDRoq-jaEa-WtUT5fY9jqDh_UcN1uRvPWhGWP69kIa-hSaNp4CfNmibLPPCtidProXP0OaJ_IxdDk00fn3tZKWyyp-7w-XY4i0OifDsK930g3Gnbit6IgkWW2F2FMEswYz5f4xxVYbWIFpwjq-RgHmuOeW1ngCKT_cJkk9UfoWixSpFjm68ClZpT0caT93qpyd_yhYFm-RJrJ0P23egixXCA-pl1PSuc1oeKHuFWl5Gg"/>
+</div>
+<div>
+<h3 class="text-lg font-bold leading-none">Apple Inc.</h3>
+<p class="text-[#92adc9] text-xs font-mono mt-1">NASDAQ: AAPL</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xl font-bold text-white">$145.32</p>
+<div class="flex items-center justify-end gap-1 text-[#0bda5b] text-xs font-medium bg-[#0bda5b]/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+1.2%</span>
+</div>
+</div>
+</div>
+<!-- Modal Body -->
+<div class="p-6 flex flex-col gap-6">
+<!-- Buy/Sell Toggle -->
+<div class="flex bg-[#111a22] p-1 rounded-lg border border-[#324d67]">
+<button class="flex-1 py-2 rounded-md bg-[#0bda5b] text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                        Buy
+                    </button>
+<button class="flex-1 py-2 rounded-md text-[#92adc9] font-medium text-sm hover:text-white transition-all">
+                        Sell
+                    </button>
+</div>
+<!-- Quantity Slider & Input -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<label class="text-[#92adc9] text-sm uppercase tracking-wider font-medium">Quantity</label>
+<div class="flex items-baseline gap-1">
+<input class="w-20 bg-transparent border-b border-white/20 text-right text-2xl font-bold text-white focus:outline-none focus:border-primary p-0" type="number" value="10"/>
+<span class="text-[#92adc9] text-sm">shares</span>
+</div>
+</div>
+<div class="relative py-2">
+<input class="w-full z-20 relative" max="100" min="1" type="range" value="10"/>
+<!-- Scale markers -->
+<div class="flex justify-between text-[10px] text-[#58738e] font-mono mt-2 px-1">
+<span>1</span>
+<span>25</span>
+<span>50</span>
+<span>75</span>
+<span>100</span>
+</div>
+</div>
+</div>
+<!-- Order Type (Quick Select) -->
+<div class="flex gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg border border-[#324d67] bg-[#16212b]/50 text-xs text-[#92adc9] hover:bg-[#16212b] hover:text-white transition-colors">
+                        Market
+                    </button>
+<button class="flex-1 py-2 px-3 rounded-lg border border-primary/50 bg-primary/10 text-xs text-primary font-bold transition-colors">
+                        Limit
+                    </button>
+<button class="flex-1 py-2 px-3 rounded-lg border border-[#324d67] bg-[#16212b]/50 text-xs text-[#92adc9] hover:bg-[#16212b] hover:text-white transition-colors">
+                        Stop
+                    </button>
+</div>
+<!-- Summary Panel -->
+<div class="bg-[#111a22]/80 rounded-xl p-4 border border-[#324d67] flex flex-col gap-2">
+<div class="flex justify-between items-center text-sm">
+<span class="text-[#92adc9]">Est. Price</span>
+<span class="font-mono text-white">$145.32</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-[#92adc9]">Fees (0.1%)</span>
+<span class="font-mono text-white">$1.45</span>
+</div>
+<div class="h-px bg-[#324d67] my-1"></div>
+<div class="flex justify-between items-center">
+<span class="text-white font-medium">Total Cost</span>
+<span class="font-mono text-xl font-bold text-primary glow-text">$1,454.67</span>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-14 bg-gradient-to-r from-primary to-[#0bda5b] rounded-xl text-white font-bold text-lg shadow-lg hover:shadow-primary/50 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 group relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+<span class="relative z-10">Place Buy Order</span>
+<span class="material-symbols-outlined relative z-10 animate-pulse">arrow_forward</span>
+</button>
+<p class="text-center text-[10px] text-[#58738e]">
+                    By placing this order, you agree to AuraTrade's Terms of Service.
+                </p>
+</div>
+</div>
+</div>
+<!-- FAB Container (Bottom Right) -->
+<div class="absolute bottom-8 right-8 z-40 group">
+<!-- Tooltip -->
+<div class="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-[#111a22] text-white text-sm px-3 py-1 rounded-lg border border-[#324d67] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            Opened (Press Esc to close)
+        </div>
+<!-- The FAB itself -->
+<button class="relative flex items-center justify-center size-16 rounded-full bg-primary text-white shadow-[0_0_30px_rgba(19,127,236,0.6)] hover:shadow-[0_0_50px_rgba(19,127,236,0.8)] transition-all transform hover:scale-110 border-2 border-white/20">
+<!-- Ripple/Glow effect animation placeholder -->
+<div class="absolute inset-0 rounded-full border border-white/40 animate-ping opacity-20"></div>
+<span class="material-symbols-outlined !text-3xl">bolt</span>
+</button>
+<!-- Expanded Menu Hint (optional visual flair for connectivity) -->
+<div class="absolute bottom-full right-1/2 translate-x-1/2 mb-4 flex flex-col gap-3 opacity-0 pointer-events-none transition-all translate-y-4">
+<div class="size-10 rounded-full bg-[#233648] flex items-center justify-center border border-[#324d67] shadow-lg">
+<span class="material-symbols-outlined text-sm">history</span>
+</div>
+<div class="size-10 rounded-full bg-[#233648] flex items-center justify-center border border-[#324d67] shadow-lg">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</div>
+</div>
+</div>
+</body></html>

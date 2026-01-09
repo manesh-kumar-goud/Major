@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraTrade Strategy Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-glow": "#137fec80",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0a0f16", // Deep navy/black
+                        "glass-surface": "rgba(255, 255, 255, 0.03)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-hover": "rgba(255, 255, 255, 0.08)",
+                        "accent-success": "#00d084",
+                        "accent-danger": "#cf2e2e",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0f16; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233648; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #137fec; 
+        }
+        
+        .glass-panel {
+            background: rgba(23, 31, 41, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .neon-glow:focus-within {
+            box-shadow: 0 0 15px rgba(19, 127, 236, 0.3);
+            border-color: #137fec;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px rgba(19, 127, 236, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased selection:bg-primary selection:text-white">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-hidden">
+<!-- Background Gradient Orb Effect -->
+<div class="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+<div class="fixed bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<!-- Top Navigation -->
+<header class="glass-panel sticky top-0 z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-10 border-b-0">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-tight neon-text">AuraTrade</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center px-8">
+<nav class="flex gap-1 p-1 bg-black/20 rounded-full border border-white/5">
+<button class="px-4 py-1.5 text-sm font-medium text-white/70 hover:text-white rounded-full transition-colors">Dashboard</button>
+<button class="px-4 py-1.5 text-sm font-medium bg-primary/20 text-primary border border-primary/20 rounded-full shadow-[0_0_10px_rgba(19,127,236,0.2)]">Playground</button>
+<button class="px-4 py-1.5 text-sm font-medium text-white/70 hover:text-white rounded-full transition-colors">Portfolio</button>
+<button class="px-4 py-1.5 text-sm font-medium text-white/70 hover:text-white rounded-full transition-colors">Analysis</button>
+</nav>
+</div>
+<div class="flex items-center justify-end gap-4 md:gap-8">
+<div class="flex gap-2">
+<button class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2.5 right-2.5 size-2 bg-primary rounded-full shadow-[0_0_5px_#137fec]"></span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-white/10" data-alt="User avatar with a futuristic gradient background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAl_c9V2b2nUwGZRSxUN0X070rcXjIlnN2oYwPHBojIBZousIfoy-Yqq7omlQsLWwnrfUMpQnB-w9sbHwz4iK9IydOQhyphoUdBfOnB02ZSyX8McO6VfdrqadkBZXPPadHSjtVMOot7fUJMe9V3-wYl4CR91LLxXQaMRP_OIBOSWNSqQNSU0ZN3HbhoK9w5l7q3yUDDR1R8aP-xvQ-1X8mmzCD0scbzXui4j8i-YlpR7sLWCTbVwoSaVOCUhZoJllSw_qvHfRGaUg");'></div>
+</div>
+</header>
+<!-- Main Content Layout -->
+<main class="relative z-10 flex flex-1 flex-col p-4 lg:p-6 max-w-[1600px] mx-auto w-full">
+<!-- Page Heading -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h1 class="text-white text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-1">Strategy Playground</h1>
+<p class="text-slate-400 text-sm font-normal">Build, test, and visualize complex options strategies in real-time.</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium border border-emerald-500/20">
+<span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Market Open
+                    </span>
+<button class="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-sm font-medium rounded-lg border border-white/10 transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export Data
+                    </button>
+</div>
+</div>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full flex-1">
+<!-- Left Panel: Controls -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Strategy Selector Card -->
+<div class="glass-panel rounded-xl p-5 flex flex-col gap-4">
+<h3 class="text-white text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">tune</span>
+                            Configure Parameters
+                        </h3>
+<!-- Strategy Type Dropdown -->
+<div class="space-y-2">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Strategy Type</label>
+<div class="relative group neon-glow rounded-xl transition-all duration-300">
+<select class="w-full appearance-none bg-[#111a22]/80 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-0 focus:border-primary transition-colors cursor-pointer">
+<option value="iron_condor">Iron Condor</option>
+<option value="long_call">Long Call</option>
+<option value="short_put">Short Put</option>
+<option value="butterfly">Butterfly Spread</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div class="h-px bg-white/10 my-1"></div>
+<!-- Strikes Input Group -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Strike A ($)</label>
+<div class="relative neon-glow rounded-xl">
+<input class="w-full bg-[#111a22]/80 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-0 focus:border-primary placeholder:text-slate-600 font-mono" placeholder="140.00" type="number" value="145.00"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Strike B ($)</label>
+<div class="relative neon-glow rounded-xl">
+<input class="w-full bg-[#111a22]/80 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-0 focus:border-primary placeholder:text-slate-600 font-mono" placeholder="150.00" type="number" value="155.00"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Strike C ($)</label>
+<div class="relative neon-glow rounded-xl">
+<input class="w-full bg-[#111a22]/80 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-0 focus:border-primary placeholder:text-slate-600 font-mono" placeholder="160.00" type="number" value="165.00"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Strike D ($)</label>
+<div class="relative neon-glow rounded-xl">
+<input class="w-full bg-[#111a22]/80 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-0 focus:border-primary placeholder:text-slate-600 font-mono" placeholder="170.00" type="number" value="175.00"/>
+</div>
+</div>
+</div>
+<!-- Date & Volatility -->
+<div class="space-y-2">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Expiry Date</label>
+<div class="relative neon-glow rounded-xl">
+<input class="w-full bg-[#111a22]/80 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-0 focus:border-primary placeholder:text-slate-600 font-mono [color-scheme:dark]" type="date"/>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between">
+<label class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Implied Volatility</label>
+<span class="text-primary text-xs font-bold font-mono">24.5%</span>
+</div>
+<input class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="24"/>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-3 mt-4">
+<button class="flex-1 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white text-sm font-bold border border-white/10 transition-all flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                                Save
+                            </button>
+<button class="flex-[2] py-3 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white text-sm font-bold shadow-[0_0_15px_rgba(19,127,236,0.4)] transition-all flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+                                Simulate
+                            </button>
+</div>
+</div>
+<!-- Mini Market Context -->
+<div class="glass-panel rounded-xl p-5">
+<h4 class="text-slate-400 text-xs font-bold uppercase mb-4 tracking-wider">Market Context (SPY)</h4>
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="text-3xl font-bold text-white font-mono">442.18</p>
+<p class="text-emerald-400 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                     +1.24%
+                                 </p>
+</div>
+<div class="h-10 w-24">
+<!-- Decorative mini sparkline -->
+<svg class="w-full h-full stroke-emerald-400 fill-none stroke-2" viewbox="0 0 100 40">
+<path d="M0 35 Q10 20 20 25 T40 15 T60 20 T80 5 T100 10"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Visualization -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Stats Cards Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="glass-panel p-4 rounded-xl border-l-4 border-l-emerald-500 relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[48px] text-emerald-500">attach_money</span>
+</div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Max Profit</p>
+<p class="text-2xl font-bold text-white mt-1 font-mono group-hover:text-emerald-400 transition-colors">$450.00</p>
+<p class="text-emerald-500/80 text-xs mt-1">At expiration</p>
+</div>
+<div class="glass-panel p-4 rounded-xl border-l-4 border-l-rose-500 relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[48px] text-rose-500">warning</span>
+</div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Max Loss</p>
+<p class="text-2xl font-bold text-white mt-1 font-mono group-hover:text-rose-400 transition-colors">$220.00</p>
+<p class="text-rose-500/80 text-xs mt-1">Risk defined</p>
+</div>
+<div class="glass-panel p-4 rounded-xl border-l-4 border-l-primary relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[48px] text-primary">balance</span>
+</div>
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Breakeven</p>
+<p class="text-2xl font-bold text-white mt-1 font-mono group-hover:text-blue-300 transition-colors">145.50 / 172.30</p>
+<p class="text-primary/80 text-xs mt-1">Price points</p>
+</div>
+</div>
+<!-- Main Chart Area -->
+<div class="glass-panel rounded-xl p-6 flex-1 min-h-[400px] flex flex-col relative">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-white text-lg font-bold">Projected P&amp;L</h3>
+<div class="flex gap-2">
+<div class="flex items-center gap-2 text-xs text-slate-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Profit
+                                </div>
+<div class="flex items-center gap-2 text-xs text-slate-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+<span class="w-2 h-2 rounded-full bg-rose-400"></span> Loss
+                                </div>
+<div class="flex items-center gap-2 text-xs text-slate-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+<span class="w-2 h-2 rounded-full bg-primary"></span> T+0 Line
+                                </div>
+</div>
+</div>
+<!-- Chart Canvas Container -->
+<div class="relative w-full h-full flex-1">
+<canvas id="payoffChart"></canvas>
+</div>
+<!-- Info Strip below chart -->
+<div class="mt-4 pt-4 border-t border-white/5 flex flex-wrap gap-6 text-xs text-slate-400 font-mono">
+<div class="flex gap-2 items-center">
+<span class="text-white font-bold">Prob. Profit:</span> 68%
+                            </div>
+<div class="flex gap-2 items-center">
+<span class="text-white font-bold">Delta:</span> -0.12
+                            </div>
+<div class="flex gap-2 items-center">
+<span class="text-white font-bold">Theta:</span> 4.25
+                            </div>
+<div class="flex gap-2 items-center">
+<span class="text-white font-bold">Vega:</span> -12.40
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Chart.js Configuration -->
+<script>
+        const ctx = document.getElementById('payoffChart').getContext('2d');
+        
+        // Gradient for profit area
+        const profitGradient = ctx.createLinearGradient(0, 0, 0, 400);
+        profitGradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Emerald top
+        profitGradient.addColorStop(0.5, 'rgba(16, 185, 129, 0.05)');
+        profitGradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+        // Gradient for loss area
+        const lossGradient = ctx.createLinearGradient(0, 200, 0, 400);
+        lossGradient.addColorStop(0, 'rgba(244, 63, 94, 0.05)'); 
+        lossGradient.addColorStop(1, 'rgba(244, 63, 94, 0.2)'); // Rose bottom
+
+        const data = {
+            labels: [130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190],
+            datasets: [
+                {
+                    label: 'P&L at Expiry',
+                    data: [-220, -220, -220, -50, 450, 450, 450, 450, 450, -50, -220, -220, -220],
+                    borderColor: '#10b981', // Greenish for the line usually, but we will segment it
+                    segment: {
+                        borderColor: ctx => ctx.p0.parsed.y < 0 || ctx.p1.parsed.y < 0 ? '#f43f5e' : '#10b981', // Red for loss, Green for profit
+                        backgroundColor: ctx => ctx.p0.parsed.y < 0 || ctx.p1.parsed.y < 0 ? 'rgba(244, 63, 94, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                    },
+                    borderWidth: 3,
+                    tension: 0.1,
+                    pointBackgroundColor: '#111a22',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    backgroundColor: (context) => {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) {
+                            return null;
+                        }
+                        // This is a simplified approach. Ideally we'd calculate the zero line accurately.
+                        // For this demo, simply returning a faint color. 
+                        // The segment property above handles the line color well.
+                        return 'rgba(255,255,255,0.02)'; 
+                    }
+                },
+                {
+                    label: 'T+0 (Today)',
+                    data: [-180, -150, -80, 100, 280, 320, 310, 290, 200, 50, -100, -160, -190],
+                    borderColor: '#137fec', // Primary Blue
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 0,
+                    fill: false
+                }
+            ]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(17, 26, 34, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#cbd5e1',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1,
+                        padding: 10,
+                        titleFont: {
+                            family: 'Space Grotesk',
+                            size: 14
+                        },
+                        bodyFont: {
+                            family: 'Space Grotesk',
+                            size: 13
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            borderColor: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: {
+                                family: 'Space Grotesk'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Stock Price at Expiration ($)',
+                            color: '#475569',
+                            font: {
+                                size: 12,
+                                family: 'Space Grotesk'
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: (context) => {
+                                if (context.tick.value === 0) {
+                                    return 'rgba(255, 255, 255, 0.3)'; // Brighter zero line
+                                }
+                                return 'rgba(255, 255, 255, 0.05)';
+                            },
+                            borderColor: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            callback: function(value) {
+                                return '$' + value;
+                            },
+                            font: {
+                                family: 'Space Grotesk'
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+    </script>
+</body></html>

@@ -12,7 +12,7 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
-from api.routes import health, stocks, predictions, auth, benchmarks
+from api.routes import health, stocks, predictions, auth, benchmarks, contact, portfolio
 from core.config import settings
 from core.database import init_cache
 from core.logging import setup_logging
@@ -63,6 +63,8 @@ app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(stocks.router, prefix="/api/stocks", tags=["Stocks"])
 app.include_router(predictions.router, prefix="/api/predictions", tags=["Predictions"])
 app.include_router(benchmarks.router, prefix="/api/benchmarks", tags=["Benchmarks"])
+app.include_router(contact.router, prefix="/api/contact", tags=["Contact"])
+app.include_router(portfolio.router, prefix="/api/portfolio", tags=["Portfolio"])
 
 @app.get("/")
 async def root():
@@ -90,5 +92,6 @@ if __name__ == "__main__":
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG,
-        log_level="info"
+        log_level="info",
+        timeout_keep_alive=1800  # 30 minutes keep-alive for long-running ML operations
     )

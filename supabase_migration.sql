@@ -343,3 +343,12 @@ INSERT INTO predictions (user_id, ticker, model_type, period, metrics) VALUES
 
 
 
+
+
+
+
+
+
+
+
+

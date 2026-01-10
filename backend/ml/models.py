@@ -5,27 +5,50 @@ import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 
+import logging
+logger = logging.getLogger("stock_forecasting")
+
 # Try to import TensorFlow
+TF_AVAILABLE = False
+Sequential = None
+LSTM = None
+Dense = None
+SimpleRNN = None
+Dropout = None
+Adam = None
+
 try:
     import tensorflow as tf
-    tf.get_logger().setLevel('ERROR')
-    from tensorflow.keras.models import Sequential
-    from tensorflow.keras.layers import LSTM, Dense, SimpleRNN, Dropout
-    from tensorflow.keras.optimizers import Adam
-    TF_AVAILABLE = True
-except ImportError:
+    # Suppress TensorFlow warnings (compatible with all TF versions)
+    try:
+        if hasattr(tf, 'get_logger'):
+            tf.get_logger().setLevel('ERROR')
+    except AttributeError:
+        # Older TensorFlow versions don't have get_logger
+        import os
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+    
+    # Try to import Keras components
+    # TensorFlow 2.18.0 uses tensorflow.keras module path
+    try:
+        # Use tensorflow.keras (works with TF 2.18.0)
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import LSTM, Dense, SimpleRNN, Dropout
+        from tensorflow.keras.optimizers import Adam
+        TF_AVAILABLE = True
+        logger.info("✅ TensorFlow and Keras imported successfully")
+    except ImportError as e:
+        logger.warning(f"TensorFlow installed but Keras import failed: {e}")
+        TF_AVAILABLE = False
+except ImportError as e:
+    logger.warning(f"TensorFlow not available: {e}")
     TF_AVAILABLE = False
-    Sequential = None
-    LSTM = None
-    Dense = None
-    SimpleRNN = None
-    Dropout = None
+except Exception as e:
+    logger.warning(f"Error importing TensorFlow: {e}")
+    TF_AVAILABLE = False
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from ml.metrics import calculate_all_metrics
-import logging
-
-logger = logging.getLogger("stock_forecasting")
 
 class BaseModel:
     """Base class for prediction models"""
@@ -43,6 +66,28 @@ class BaseModel:
         """Make predictions"""
         if not self.is_trained:
             raise ValueError("Model must be trained before prediction")
+        
+        # Handle case when TensorFlow is not available
+        if not TF_AVAILABLE or self.model is None:
+            logger.warning("TensorFlow not available or model is None, using fallback predictions")
+            # Create fallback predictions based on input data
+            X_test_array = np.array(X_test)
+            
+            # If 3D input (batch, timesteps, features), use last timestep
+            if len(X_test_array.shape) == 3:
+                # Use mean of last few timesteps as prediction
+                predictions = np.mean(X_test_array[:, -5:, :], axis=1)
+                if predictions.shape[1] == 1:
+                    return predictions.flatten()
+                return predictions[:, -1]  # Use last feature
+            elif len(X_test_array.shape) == 2:
+                # Use mean of last few values
+                predictions = np.mean(X_test_array[:, -5:], axis=1)
+                return predictions
+            else:
+                # Simple fallback
+                return np.array([np.mean(X_test_array)] * len(X_test_array))
+        
         return self.model.predict(X_test, verbose=0)
     
     def predict_single(self, sequence):
@@ -182,9 +227,15 @@ class LSTMModel(BaseModel):
     def train(self, X_train, y_train, epochs=100, batch_size=32, verbose=0, learning_rate=0.0008):
         """Train LSTM model with improved architecture"""
         if not TF_AVAILABLE:
-            logger.warning("TensorFlow not available")
-            self.is_trained = True
-            return
+            logger.error("❌ TensorFlow not available - Cannot train model!")
+            logger.error("Please install TensorFlow: pip install tensorflow")
+            raise RuntimeError("TensorFlow is required for model training. Please install it: pip install tensorflow")
+        
+        logger.info(f"🚀 Starting LSTM model training...")
+        logger.info(f"   Training samples: {len(X_train)}")
+        logger.info(f"   Epochs: {epochs}")
+        logger.info(f"   Batch size: {batch_size}")
+        logger.info(f"   Learning rate: {learning_rate}")
         
         # Ensure proper data types and shapes
         X_train = np.array(X_train, dtype=np.float32)
@@ -295,7 +346,22 @@ class LSTMModel(BaseModel):
         # Increased validation split for better validation
         validation_split = 0.2 if len(X_train) > 50 else 0.15 if len(X_train) > 20 else 0.1 if len(X_train) > 10 else 0
         
-        self.model.fit(
+        # Add progress logging callback
+        try:
+            from tensorflow.keras.callbacks import LambdaCallback
+            progress_logger = LambdaCallback(
+                on_epoch_end=lambda epoch, logs: logger.info(
+                    f"   Epoch {epoch + 1}/{effective_epochs} - Loss: {logs.get('loss', 0):.6f}, "
+                    f"Val Loss: {logs.get('val_loss', 'N/A')}"
+                )
+            )
+            callbacks.append(progress_logger)
+        except:
+            pass
+        
+        logger.info(f"⏳ Training LSTM model (this may take a few minutes)...")
+        
+        history = self.model.fit(
             X_train, y_train,
             epochs=effective_epochs,
             batch_size=batch_size,
@@ -304,7 +370,11 @@ class LSTMModel(BaseModel):
             callbacks=callbacks
         )
         
+        final_loss = history.history['loss'][-1] if history.history.get('loss') else 0
+        logger.info(f"✅ Training completed! Final loss: {final_loss:.6f}")
+        
         self.is_trained = True
+        logger.info(f"✅ Model is now trained and ready for predictions")
 
 class RNNModel(BaseModel):
     """Optimized RNN model with improved architecture"""
@@ -318,9 +388,15 @@ class RNNModel(BaseModel):
     def train(self, X_train, y_train, epochs=100, batch_size=32, verbose=0, learning_rate=0.0008):
         """Train RNN model with improved architecture"""
         if not TF_AVAILABLE:
-            logger.warning("TensorFlow not available")
-            self.is_trained = True
-            return
+            logger.error("❌ TensorFlow not available - Cannot train model!")
+            logger.error("Please install TensorFlow: pip install tensorflow")
+            raise RuntimeError("TensorFlow is required for model training. Please install it: pip install tensorflow")
+        
+        logger.info(f"🚀 Starting RNN model training...")
+        logger.info(f"   Training samples: {len(X_train)}")
+        logger.info(f"   Epochs: {epochs}")
+        logger.info(f"   Batch size: {batch_size}")
+        logger.info(f"   Learning rate: {learning_rate}")
         
         # Ensure proper data types and shapes
         X_train = np.array(X_train, dtype=np.float32)
@@ -384,7 +460,22 @@ class RNNModel(BaseModel):
         
         validation_split = 0.2 if len(X_train) > 50 else 0.15 if len(X_train) > 20 else 0.1 if len(X_train) > 10 else 0
         
-        self.model.fit(
+        # Add progress logging callback
+        try:
+            from tensorflow.keras.callbacks import LambdaCallback
+            progress_logger = LambdaCallback(
+                on_epoch_end=lambda epoch, logs: logger.info(
+                    f"   Epoch {epoch + 1}/{effective_epochs} - Loss: {logs.get('loss', 0):.6f}, "
+                    f"Val Loss: {logs.get('val_loss', 'N/A')}"
+                )
+            )
+            callbacks.append(progress_logger)
+        except:
+            pass
+        
+        logger.info(f"⏳ Training RNN model (this may take a few minutes)...")
+        
+        history = self.model.fit(
             X_train, y_train,
             epochs=effective_epochs,
             batch_size=batch_size,
@@ -393,6 +484,10 @@ class RNNModel(BaseModel):
             callbacks=callbacks
         )
         
+        final_loss = history.history['loss'][-1] if history.history.get('loss') else 0
+        logger.info(f"✅ Training completed! Final loss: {final_loss:.6f}")
+        
         self.is_trained = True
+        logger.info(f"✅ Model is now trained and ready for predictions")
 
 

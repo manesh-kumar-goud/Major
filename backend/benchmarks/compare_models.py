@@ -10,7 +10,7 @@ from datetime import datetime
 
 from ml.models import LSTMModel, RNNModel
 from ml.utils import preprocess_data, create_sequences, inverse_transform
-from ml.metrics import calculate_advanced_metrics
+from ml.metrics import calculate_all_metrics
 
 logger = logging.getLogger("stock_forecasting")
 

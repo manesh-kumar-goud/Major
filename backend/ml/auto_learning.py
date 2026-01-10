@@ -23,7 +23,7 @@ except ImportError:
     mlflow = None
 
 from core.config import settings
-from ml.metrics import calculate_advanced_metrics
+from ml.metrics import calculate_all_metrics
 
 logger = logging.getLogger("stock_forecasting")
 

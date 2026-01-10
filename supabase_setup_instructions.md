@@ -125,3 +125,12 @@ Your Supabase database is now set up and ready for StockNeuro integration!
 
 
 
+
+
+
+
+
+
+
+
+

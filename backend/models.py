@@ -12,7 +12,13 @@ mean_squared_error, mean_absolute_error, r2_score = None, None, None
 # Try to import TensorFlow components with fallback
 try:
     import tensorflow as tf
-    tf.get_logger().setLevel('ERROR')  # Suppress TensorFlow warnings
+    # Suppress TensorFlow warnings (compatible with all TF versions)
+    try:
+        tf.get_logger().setLevel('ERROR')
+    except AttributeError:
+        # Older TensorFlow versions don't have get_logger
+        import os
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
     
     from tensorflow.keras.models import Sequential  # type: ignore
     from tensorflow.keras.layers import LSTM, Dense, SimpleRNN  # type: ignore

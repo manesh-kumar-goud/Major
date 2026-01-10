@@ -54,10 +54,19 @@ class PredictionService:
         ticker: str,
         model_type: str,
         period: str,
-        prediction_days: int
+        prediction_days: int,
+        epochs: int = None,
+        batch_size: int = None,
+        sequence_length: int = None
     ) -> Dict:
         """Make stock price prediction"""
         logger.info(f"Making prediction: {ticker}, {model_type}, {period}, {prediction_days} days")
+        
+        # Override sequence_length if provided
+        original_sequence_length = self.sequence_length
+        if sequence_length is not None:
+            self.sequence_length = sequence_length
+            logger.info(f"Using custom sequence_length: {sequence_length} (default: {original_sequence_length})")
         
         # Get historical data - REAL DATA ONLY
         historical_data = await self.stock_service.get_stock_history(ticker, period)
@@ -134,36 +143,48 @@ class PredictionService:
         default_batch_size = 32
         default_learning_rate = 0.0008  # Optimized learning rate for better convergence
         
+        # Use provided hyperparameters or defaults
         hyperparams = {
-            "epochs": default_epochs,
-            "batch_size": default_batch_size,
+            "epochs": epochs if epochs is not None else default_epochs,
+            "batch_size": batch_size if batch_size is not None else default_batch_size,
             "learning_rate": default_learning_rate
         }
         
-        if self.brain:
+        logger.info(f"Training hyperparameters: epochs={hyperparams['epochs']}, batch_size={hyperparams['batch_size']}, sequence_length={self.sequence_length}")
+        
+        # Only use auto-learning suggestions if user didn't provide custom values
+        if self.brain and epochs is None and batch_size is None:
             try:
                 suggested = self.brain.suggest_hyperparameters(
                     model_type=model_type_upper,
                     data_size=len(X_train)
                 )
-                hyperparams.update({
-                    "epochs": suggested.get("epochs", default_epochs),
-                    "batch_size": suggested.get("batch_size", default_batch_size),
-                    "learning_rate": suggested.get("learning_rate", default_learning_rate)
-                })
+                # Only update if user didn't provide custom values
+                if epochs is None:
+                    hyperparams["epochs"] = suggested.get("epochs", default_epochs)
+                if batch_size is None:
+                    hyperparams["batch_size"] = suggested.get("batch_size", default_batch_size)
+                hyperparams["learning_rate"] = suggested.get("learning_rate", default_learning_rate)
                 logger.info(f"Auto-learning suggested: {hyperparams}")
             except Exception as e:
                 logger.warning(f"Could not get hyperparameter suggestions: {e}")
+        else:
+            logger.info(f"Using user-provided hyperparameters (auto-learning skipped)")
         
         # Train model with improved hyperparameters
+        logger.info(f"🔧 Training {model_type_upper} model...")
+        logger.info(f"   Hyperparameters: epochs={hyperparams['epochs']}, batch_size={hyperparams['batch_size']}, lr={hyperparams.get('learning_rate', default_learning_rate)}")
+        
         model.train(
             X_train, 
             y_train, 
             epochs=hyperparams["epochs"], 
             batch_size=hyperparams["batch_size"],
             learning_rate=hyperparams.get("learning_rate", default_learning_rate),
-            verbose=0
+            verbose=1  # Enable verbose to see training progress
         )
+        
+        logger.info(f"✅ Model training completed successfully!")
         
         # Make predictions
         predictions = model.predict(X_test)

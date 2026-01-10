@@ -24,11 +24,18 @@ class PredictionRequest(BaseModel):
     period: str = "3y"  # Changed from "1y" to "3y" for more data (better accuracy)
     prediction_days: int = 30
     predictionDays: int = None  # Accept camelCase for frontend compatibility
+    epochs: int = None  # Optional: override default epochs
+    batch_size: int = None  # Optional: override default batch size
+    sequence_length: int = None  # Optional: override default sequence length (lookback)
     
     def __init__(self, **data):
         # Handle both snake_case and camelCase
         if 'predictionDays' in data and 'prediction_days' not in data:
             data['prediction_days'] = data.pop('predictionDays')
+        if 'batchSize' in data and 'batch_size' not in data:
+            data['batch_size'] = data.pop('batchSize')
+        if 'sequenceLength' in data and 'sequence_length' not in data:
+            data['sequence_length'] = data.pop('sequenceLength')
         super().__init__(**data)
 
 class ComparisonRequest(BaseModel):
@@ -43,12 +50,26 @@ async def predict_stock(
 ):
     """Make stock price prediction using LSTM or RNN"""
     try:
-        result = await prediction_service.predict(
-            ticker=request.ticker.upper(),
-            model_type=request.model.upper(),
-            period=request.period,
-            prediction_days=request.prediction_days
-        )
+        # Prepare hyperparameters if provided
+        predict_kwargs = {
+            'ticker': request.ticker.upper(),
+            'model_type': request.model.upper(),
+            'period': request.period,
+            'prediction_days': request.prediction_days
+        }
+        
+        # Add optional hyperparameters if provided
+        if request.epochs is not None:
+            predict_kwargs['epochs'] = request.epochs
+            logger.info(f"Using custom epochs: {request.epochs}")
+        if request.batch_size is not None:
+            predict_kwargs['batch_size'] = request.batch_size
+            logger.info(f"Using custom batch_size: {request.batch_size}")
+        if request.sequence_length is not None:
+            predict_kwargs['sequence_length'] = request.sequence_length
+            logger.info(f"Using custom sequence_length: {request.sequence_length}")
+        
+        result = await prediction_service.predict(**predict_kwargs)
         
         # Save prediction to history for portfolio tracking
         try:

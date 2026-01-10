@@ -283,9 +283,9 @@ class PatchTSTModel:
         Returns:
             Dictionary of metrics
         """
-        from ml.metrics import calculate_advanced_metrics
+        from ml.metrics import calculate_all_metrics
         
-        metrics = calculate_advanced_metrics(
+        metrics = calculate_all_metrics(
             y_true.flatten(),
             y_pred.flatten(),
             y_train=y_train.flatten() if y_train is not None else None

@@ -95,3 +95,5 @@ secrets.py
 
 # Vercel deployment
 .vercel/ 
+# MLflow tracking
+mlruns/
